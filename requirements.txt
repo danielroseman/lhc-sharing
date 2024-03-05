@@ -1,0 +1,12 @@
+django==4.2.10
+django-storages==1.14.2
+django_invitations==2.1.0
+django-allauth==0.61.1
+django_crispy_forms==2.1
+crispy_bootstrap5==2024.2
+
+
+django-stubs==4.2.7
+mypy==1.8.0
+pytest==-8.0.2
+ipython
