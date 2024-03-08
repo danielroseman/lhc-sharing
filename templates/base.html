@@ -18,18 +18,21 @@
     {% block extrahead %}{% endblock %}
   </head>
   <body>
-    <div class="container-fluid">
+    <div class="container">
       <nav class="navbar navbar-expand-lg">
         <div class="container-fluid">
           <a class="navbar-brand" href="#">
-            <img src="{% static "london-humanist-choir-logo-80h.jpg" %}" alt="Logo" width="269" height="80" alt="London Humanist Choir logo">
+            <img src="{% static "london-humanist-choir-logo-80h.jpg" %}" alt="London Humanist Choir logo" width="269" height="80">
           </a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
-          <div class="collapse navbar-collapse" id="navbarNav">
+          <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
             <ul class="navbar-nav">
               {% if user.is_authenticated %}
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'songs' %}">Music list</a>
+              </li>
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'account_change_password' %}">Change Password</a>
               </li>

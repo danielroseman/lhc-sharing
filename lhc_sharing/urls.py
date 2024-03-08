@@ -22,7 +22,9 @@ from music import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("invitations/", include('invitations.urls', namespace='invitations')),
-    #  path("accounts/", include("django.contrib.auth.urls")),
     path('accounts/', include('allauth.urls')),
     path('', views.home, name='home'),
+    path('songs', views.CurrentMusicList.as_view(), name='songs'),
+    path('all-songs', views.MusicList.as_view(), name='all_songs'),
+    path('song/<int:pk>', views.MusicDetail.as_view(), name='song_detail'),
 ]

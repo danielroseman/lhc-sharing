@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<h1>{{ song.name }}</h1>
+<ul>
+  {% for file in song.file_set.all %}
+  <li>
+    <svg class="bi" width="16" height="16" fill="currentColor" aria-label="{{ file.filetype.upper }} file">
+      <use xlink:href="{% static "icons.svg" %}#file-earmark{% if file.filetype == 'pdf' %}-pdf{% elif file.filetype == 'mp3' %}-music{% endif %}"/>
+    </svg>
+    <a href="{{ file.file.url }}">{{ file.name }}</a></li>
+  {% endfor %}
+</ul>
+
+
+<a href="{% if song.current %}{% url "songs" %}{% else %}{% url "all_songs" %}{% endif %}">Back to songs list</a>
+{% endblock %}
