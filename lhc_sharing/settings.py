@@ -17,6 +17,7 @@ from urllib.parse import urlparse
 
 import environ
 import google.auth
+from google.oauth2 import service_account
 from google.cloud import secretmanager
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -34,7 +35,6 @@ except google.auth.exceptions.DefaultCredentialsError:
 
 if os.path.isfile(env_file):
     # Use a local secret file, if provided
-
     env.read_env(env_file)
 # ...
 elif os.environ.get("GOOGLE_CLOUD_PROJECT", None):
@@ -154,6 +154,7 @@ ACCOUNT_ADAPTER = 'invitations.models.InvitationsAdapter'
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_EMAIL_SUBJECT_PREFIX = "[London Humanist Choir] "
 
 INVITATIONS_ADAPTER = ACCOUNT_ADAPTER
 INVITATIONS_INVITATION_ONLY = True
@@ -177,30 +178,35 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-STORAGES = {
-    "default": {
-        "BACKEND": "storages.backends.gcloud.GoogleCloudStorage",
-        "OPTIONS": {
-            "bucket_name": "london-humanist-choir",
-            "default_acl": "projectPrivate",
-            "location": "media",
+if (creds := env('GS_ACCOUNT_FILE')):
+    GS_CREDENTIALS = service_account.Credentials.from_service_account_file(creds)
+    STORAGES = {
+        "default": {
+            "BACKEND": "storages.backends.gcloud.GoogleCloudStorage",
+            "OPTIONS": {
+                "bucket_name": "london-humanist-choir",
+                "default_acl": "projectPrivate",
+                "location": "media",
+            },
         },
-    },
-    "staticfiles": {
-        "BACKEND": "storages.backends.gcloud.GoogleCloudStorage",
-        "OPTIONS": {
-            "bucket_name": "london-humanist-choir",
-            "default_acl": "publicRead",
-            "location": "static",
+        "staticfiles": {
+            "BACKEND": "storages.backends.gcloud.GoogleCloudStorage",
+            "OPTIONS": {
+                "bucket_name": "london-humanist-choir",
+                "default_acl": "publicRead",
+                "location": "static",
+            },
         },
-    },
-}
+    }
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+EMAIL_BACKEND = 'gmailapi_backend.mail.GmailBackend'
+GMAIL_API_CLIENT_ID = env("GMAIL_API_CLIENT_ID")
+GMAIL_API_CLIENT_SECRET = env("GMAIL_API_CLIENT_SECRET")
+GMAIL_API_REFRESH_TOKEN = env("GMAIL_API_REFRESH_TOKEN")
 
 STATICFILES_DIRS = [BASE_DIR / "static"]
