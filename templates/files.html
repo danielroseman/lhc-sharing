@@ -5,11 +5,8 @@
 <h1>{{ song.name }}</h1>
 <ul>
   {% for file in song.file_set.all %}
-  <li>
-    <svg class="bi" width="16" height="16" fill="currentColor" aria-label="{{ file.filetype.upper }} file">
-      <use xlink:href="{% static "icons.svg" %}#file-earmark{% if file.filetype == 'pdf' %}-pdf{% elif file.filetype == 'mp3' %}-music{% endif %}"/>
-    </svg>
-    <a href="{{ file.file.url }}">{{ file.name }}</a></li>
+  <li class="file-list">
+    <a href="{{ file.file.url }}"><img src="{% static "file-earmark" %}{% if file.filetype == 'pdf' %}-pdf{% elif file.filetype == 'mp3' %}-music{% endif %}.svg" alt="{{ file.filetype.upper }} file" height="24px" width="24px"> {{ file.name }}</li>
   {% endfor %}
 </ul>
 

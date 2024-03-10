@@ -12,20 +12,18 @@ class Song(models.Model):
 
 
 class File(models.Model):
+    class FileTypes(models.TextChoices):
+        PDF = "pdf"
+        MP3 = "mp3"
+        OTHER = "other"
+
     name = models.CharField(max_length=255, blank=False)
     song = models.ForeignKey(Song, on_delete=models.CASCADE)
     file = models.FileField()
+    filetype = models.CharField(max_length=35, choices=FileTypes.choices, default="other")
 
     def __str__(self):
         return self.name
 
     def __repr__(self):
         return f"{self.name} ({self.song.name})"
-
-    def filetype(self):
-        if self.file.url.endswith('pdf'):
-            return 'pdf'
-        elif self.file.url.endswith('mp3'):
-            return 'mp3'
-        else:
-            return 'other'
