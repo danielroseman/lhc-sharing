@@ -1,0 +1,9 @@
+.gcloudignore
+.git
+.gitignore
+.python-version
+media
+db.sqlite3
+.env
+env.prod
+
