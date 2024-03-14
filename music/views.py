@@ -16,13 +16,13 @@ def home(request):
 
 class CurrentMusicList(LoginRequiredMixin, ListView):
     extra_context = {"current": True}
-    queryset = Song.objects.filter(current=True)
+    queryset = Song.objects.filter(current=True).order_by('name')
     template_name = 'songs.html'
 
 
 class MusicList(LoginRequiredMixin, ListView):
     extra_context = {"current": False}
-    queryset = Song.objects.all()
+    queryset = Song.objects.all().order_by('name')
     template_name = 'songs.html'
 
 

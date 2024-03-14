@@ -12,6 +12,7 @@ class FileInline(admin.TabularInline):
 class SongAdmin(admin.ModelAdmin):
     inlines = [FileInline]
     list_display = ('name', 'current')
+    list_editable = ['current']
 
     def save_formset(self, request, form, formset, change):
         instances = formset.save(commit=False)
