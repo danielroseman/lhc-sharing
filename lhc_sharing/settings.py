@@ -125,7 +125,7 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 ACCOUNT_ADAPTER = "invitations.models.InvitationsAdapter"
-ACCOUNT_AUTHENTICATION_METHOD = "email"
+ACCOUNT_LOGIN_METHODS = {"email"}
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_EMAIL_SUBJECT_PREFIX = EMAIL_SUBJECT_PREFIX = "[London Humanist Choir] "
@@ -180,3 +180,25 @@ EMAIL_BACKEND = "gmailapi_backend.mail.GmailBackend"
 GMAIL_API_CLIENT_ID = env("GMAIL_API_CLIENT_ID")
 GMAIL_API_CLIENT_SECRET = env("GMAIL_API_CLIENT_SECRET")
 GMAIL_API_REFRESH_TOKEN = env("GMAIL_API_REFRESH_TOKEN")
+
+MAILCHIMP_SERVER_PREFIX = "us2"
+MAILCHIMP_API_KEY = env("MAILCHIMP_API_KEY")
+MAILCHIMP_LIST_ID = "34e00f11a4"
+
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "mail_admins": {
+            "level": "ERROR",
+            "class": "django.utils.log.AdminEmailHandler",
+        },
+    },
+    "loggers": {
+        "music.forms": {
+            "handlers": ["mail_admins"],
+            "level": "ERROR",
+        },
+    }
+}

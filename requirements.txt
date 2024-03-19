@@ -1,6 +1,6 @@
 Django==5.1
 django_invitations==2.1.0
-django-allauth==64.1.0
+django-allauth==65.4.1
 django_crispy_forms==2.1
 crispy_bootstrap5==2024.2
 django-environ==0.11.2
@@ -10,3 +10,4 @@ django-gmailapi-backend==0.3.2
 git+https://github.com/danielroseman/django-direct-cloud-upload
 django-swingtime==1.5.2
 Markdown==3.7
+mailchimp-marketing==3.0.80
