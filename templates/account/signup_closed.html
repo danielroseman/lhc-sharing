@@ -1,0 +1,14 @@
+{% extends "account/base_entrance.html" %}
+{% load i18n %}
+{% load allauth %}
+{% block head_title %}
+    {% trans "Sign Up Closed" %}
+{% endblock head_title %}
+{% block content %}
+    {% element h1 %}
+        {% trans "Sign Up Closed" %}
+    {% endelement %}
+    {% element p %}
+        Sign up is currently by invitation only. Ask the membership secretary at rehearsal to send you an invitation.
+    {% endelement %}
+{% endblock content %}
