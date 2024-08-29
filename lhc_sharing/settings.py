@@ -215,6 +215,7 @@ elif (creds := env('GS_ACCOUNT_JSON')):
             "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
         },
     }
+    STATIC_ROOT = "/static_root"
 else:
     MEDIA_ROOT = 'media/'
 
