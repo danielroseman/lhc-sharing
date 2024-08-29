@@ -28,26 +28,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 env = environ.Env(DEBUG=(bool, True))
 env_file = BASE_DIR / ".env"
 
-# Attempt to load the Project ID into the environment, safely failing on error.
-try:
-    _, os.environ["GOOGLE_CLOUD_PROJECT"] = google.auth.default()
-except google.auth.exceptions.DefaultCredentialsError:
-    pass
-
 if os.path.isfile(env_file):
     # Use a local secret file, if provided
     env.read_env(env_file)
-# ...
-elif os.environ.get("GOOGLE_CLOUD_PROJECT", None):
-    # Pull secrets from Secret Manager
-    project_id = os.environ.get("GOOGLE_CLOUD_PROJECT")
-
-    client = secretmanager.SecretManagerServiceClient()
-    settings_name = os.environ.get("SETTINGS_NAME", "django_settings")
-    name = f"projects/{project_id}/secrets/{settings_name}/versions/latest"
-    payload = client.access_secret_version(name=name).payload.data.decode("UTF-8")
-
-    env.read_env(io.StringIO(payload))
 
 SECRET_KEY = env("SECRET_KEY")
 
