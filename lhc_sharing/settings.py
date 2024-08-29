@@ -203,7 +203,7 @@ if (creds := env('GS_ACCOUNT_FILE')):
         },
     }
 elif (creds := env('GS_ACCOUNT_JSON')):
-    GS_CREDENTIALS = service_account.Credentials.from_service_account_file(json.loads(creds))
+    GS_CREDENTIALS = service_account.Credentials.from_service_account_info(json.loads(creds))
     STORAGES = {
         "default": {
             "BACKEND": "storages.backends.gcloud.GoogleCloudStorage",
