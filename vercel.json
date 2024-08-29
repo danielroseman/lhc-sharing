@@ -1,6 +1,6 @@
 {
   "routes": [
     { "src": "/static/(.*)", "dest": "/static/$1" },
-    { "src": "/(.*)", "dest": "api/wsgi.py" }
+    { "src": "/(.*)", "dest": "lhc_sharing/wsgi.py" }
   ]
 }
