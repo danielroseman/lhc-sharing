@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 import os
 import io
+import json
 from pathlib import Path
 from urllib.parse import urlparse
 
@@ -47,8 +48,8 @@ elif os.environ.get("GOOGLE_CLOUD_PROJECT", None):
     payload = client.access_secret_version(name=name).payload.data.decode("UTF-8")
 
     env.read_env(io.StringIO(payload))
-else:
-    raise Exception("No local .env or GOOGLE_CLOUD_PROJECT detected. No secrets found.")
+#  else:
+    #  raise Exception("No local .env or GOOGLE_CLOUD_PROJECT detected. No secrets found.")
 
 SECRET_KEY = env("SECRET_KEY")
 
@@ -198,6 +199,18 @@ if (creds := env('GS_ACCOUNT_FILE')):
                 "bucket_name": "london-humanist-choir",
                 "default_acl": "publicRead",
                 "location": "static",
+            },
+        },
+    }
+elif (creds := env('GS_ACCOUNT_JSON')):
+    GS_CREDENTIALS = service_account.Credentials.from_service_account_file(json.loads(creds))
+    STORAGES = {
+        "default": {
+            "BACKEND": "storages.backends.gcloud.GoogleCloudStorage",
+            "OPTIONS": {
+                "bucket_name": "london-humanist-choir",
+                "default_acl": "projectPrivate",
+                "location": "media",
             },
         },
     }
