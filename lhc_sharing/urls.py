@@ -17,12 +17,15 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+import direct_cloud_upload
+
 from music import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("invitations/", include('invitations.urls', namespace='invitations')),
     path('accounts/', include('allauth.urls')),
+    path('direct_cloud_upload/', include(direct_cloud_upload.urlpatterns)),
     path('', views.home, name='home'),
     path('songs', views.CurrentMusicList.as_view(), name='songs'),
     path('all-songs', views.MusicList.as_view(), name='all_songs'),

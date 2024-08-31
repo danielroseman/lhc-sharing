@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'allauth.account',
     "crispy_forms",
     "crispy_bootstrap5",
+    "direct_cloud_upload",
     'invitations',
     'music'
 ]
@@ -155,24 +156,21 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+BUCKET_NAME = "london-humanist-choir"
+
 if (creds := env('GS_ACCOUNT_FILE')):
     GS_CREDENTIALS = service_account.Credentials.from_service_account_file(creds)
     STORAGES = {
         "default": {
             "BACKEND": "storages.backends.gcloud.GoogleCloudStorage",
             "OPTIONS": {
-                "bucket_name": "london-humanist-choir",
+                "bucket_name": BUCKET_NAME,
                 "default_acl": "projectPrivate",
                 "location": "media",
             },
         },
         "staticfiles": {
-            "BACKEND": "storages.backends.gcloud.GoogleCloudStorage",
-            "OPTIONS": {
-                "bucket_name": "london-humanist-choir",
-                "default_acl": "publicRead",
-                "location": "static",
-            },
+            "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
         },
     }
 elif (creds := env('GS_ACCOUNT_JSON')):
@@ -181,7 +179,7 @@ elif (creds := env('GS_ACCOUNT_JSON')):
         "default": {
             "BACKEND": "storages.backends.gcloud.GoogleCloudStorage",
             "OPTIONS": {
-                "bucket_name": "london-humanist-choir",
+                "bucket_name": BUCKET_NAME,
                 "default_acl": "projectPrivate",
                 "location": "media",
             },

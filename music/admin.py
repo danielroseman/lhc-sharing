@@ -1,15 +1,33 @@
+from direct_cloud_upload import CloudFileWidget, DdcuAdminMixin
+from django.conf import settings
 from django.contrib import admin
+from django import forms
+from google.cloud import storage
 
-from music.models import Song, File
+from music.models import Song, File, DDCU_BUCKET_IDENTIFIER
 
+
+class FileForm(forms.ModelForm):
+    class Meta:
+        model = File
+        fields = ['name', 'file']
+
+        widgets = {
+            'file': CloudFileWidget(
+                bucket_identifier=DDCU_BUCKET_IDENTIFIER,
+                path_prefix="media/",
+                include_timestamp=False
+            )
+        }
 
 class FileInline(admin.TabularInline):
     model = File
+    form = FileForm
 
 
 
 @admin.register(Song)
-class SongAdmin(admin.ModelAdmin):
+class SongAdmin(DdcuAdminMixin):
     inlines = [FileInline]
     list_display = ('name', 'current')
     list_editable = ['current']
@@ -21,8 +39,8 @@ class SongAdmin(admin.ModelAdmin):
         for obj in instances:
             if obj.filetype == 'other':
                 if obj.file:
-                    if obj.file.url.endswith('.pdf'):
+                    if obj.file.endswith('.pdf'):
                         obj.filetype = 'pdf'
-                    elif obj.file.url.endswith('mp3'):
+                    elif obj.file.endswith('mp3'):
                         obj.filetype = 'mp3'
             obj.save()
