@@ -7,4 +7,5 @@ crispy_bootstrap5==2024.2
 django-environ==0.11.2
 psycopg2-binary==2.9.9
 django-gmailapi-backend==0.3.2
-django-direct-cloud-upload==0.3.0
+# django-direct-cloud-upload==0.3.0
+git+https://github.com/danielroseman/django-direct-cloud-upload
