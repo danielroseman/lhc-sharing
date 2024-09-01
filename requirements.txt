@@ -1,5 +1,4 @@
 Django==5.1
-django-storages[google]==1.14.2
 django_invitations==2.1.0
 django-allauth==64.1.0
 django_crispy_forms==2.1

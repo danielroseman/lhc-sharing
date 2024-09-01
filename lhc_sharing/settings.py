@@ -11,20 +11,17 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 import os
-import io
 import json
 from pathlib import Path
-from urllib.parse import urlparse
 
 import environ
-import google.auth
 from google.oauth2 import service_account
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-env = environ.Env(DEBUG=(bool, True))
+env = environ.Env(DEBUG=(bool, False))
 env_file = BASE_DIR / ".env"
 
 if os.path.isfile(env_file):
@@ -35,7 +32,7 @@ SECRET_KEY = env("SECRET_KEY")
 
 DEBUG = env("DEBUG")
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ['localhost', '.vercel.app', 'members-london.humanistchoir.org']
 
 # Application definition
 
@@ -155,42 +152,16 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = "static_root/static"
+MEDIA_ROOT = 'media/'
 
 BUCKET_NAME = "london-humanist-choir"
 
 if (creds := env('GS_ACCOUNT_FILE')):
     GS_CREDENTIALS = service_account.Credentials.from_service_account_file(creds)
-    STORAGES = {
-        "default": {
-            "BACKEND": "storages.backends.gcloud.GoogleCloudStorage",
-            "OPTIONS": {
-                "bucket_name": BUCKET_NAME,
-                "default_acl": "projectPrivate",
-                "location": "media",
-            },
-        },
-        "staticfiles": {
-            "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
-        },
-    }
 elif (creds := env('GS_ACCOUNT_JSON')):
     GS_CREDENTIALS = service_account.Credentials.from_service_account_info(json.loads(creds))
-    STORAGES = {
-        "default": {
-            "BACKEND": "storages.backends.gcloud.GoogleCloudStorage",
-            "OPTIONS": {
-                "bucket_name": BUCKET_NAME,
-                "default_acl": "projectPrivate",
-                "location": "media",
-            },
-        },
-        "staticfiles": {
-            "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
-        },
-    }
-    STATIC_ROOT = "static_root/static"
-else:
-    MEDIA_ROOT = 'media/'
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field

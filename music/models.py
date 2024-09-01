@@ -10,7 +10,7 @@ from direct_cloud_upload import register_gcs_bucket
 from google.cloud import storage
 
 client = storage.Client(credentials=settings.GS_CREDENTIALS)
-gcs_bucket = client.bucket('london-humanist-choir')
+gcs_bucket = client.bucket(settings.BUCKET_NAME)
 DDCU_BUCKET_IDENTIFIER = register_gcs_bucket(gcs_bucket)
 
 
