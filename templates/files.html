@@ -4,9 +4,9 @@
 
 <h1>{{ song.name }}</h1>
 <ul>
-  {% for file in song.file_set.all %}
+  {% for file in song.file_urls %}
   <li class="file-list">
-    <a href="{{ file.file_url }}"><img src="{% static "file-earmark" %}{% if file.filetype == 'pdf' %}-pdf{% elif file.filetype == 'mp3' %}-music{% endif %}.svg" alt="{{ file.filetype.upper }} file" height="24px" width="24px"> {{ file.name }}</li>
+    <a href="{{ file.url }}"><img src="{% static "file-earmark" %}{% if file.path.suffix == '.pdf' %}-pdf{% elif file.path.suffix == '.mp3' %}-music{% endif %}.svg" alt="{{ file.type.upper }} file" height="24px" width="24px"> {{ file.path.name }}</li>
   {% endfor %}
 </ul>
 

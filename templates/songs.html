@@ -7,7 +7,7 @@
 </div>
 <ul id="songs">
   {% for song in song_list %}
-  <li><a href="{% url 'song_detail' pk=song.pk %}">{{ song.name }}</a></li>
+  <li><a href="{% url 'song_detail' slug=song.slug %}">{{ song.name }}</a></li>
   {% endfor %}
 </ul>
 

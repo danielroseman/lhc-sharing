@@ -1,18 +1,13 @@
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 
-from music.models import Song, File
+from music.models import Song
 
 # Create your views here.
 def home(request):
     return render(request, 'home.html')
-
-
-#  @login_required
-#  def current_music(request):
 
 class CurrentMusicList(LoginRequiredMixin, ListView):
     extra_context = {"current": True}

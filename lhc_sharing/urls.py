@@ -29,5 +29,5 @@ urlpatterns = [
     path('', views.home, name='home'),
     path('songs', views.CurrentMusicList.as_view(), name='songs'),
     path('all-songs', views.MusicList.as_view(), name='all_songs'),
-    path('song/<int:pk>', views.MusicDetail.as_view(), name='song_detail'),
+    path('song/<str:slug>', views.MusicDetail.as_view(), name='song_detail'),
 ]
