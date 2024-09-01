@@ -1,6 +1,23 @@
 {
-  "routes": [
-    { "src": "/static/(.*)", "dest": "/static_root/$1" },
-    { "src": "/(.*)", "dest": "api/wsgi.py" }
-  ]
-}
+    "version": 2,
+    "builds": [
+      {
+        "src": "lhc_sharing/wsgi.py",
+        "use": "@vercel/python"
+      },
+      {
+        "src": "build_files.sh",
+        "use": "@vercel/static"
+      }
+    ],
+    "routes": [
+      {
+        "src": "/static/(.*)",
+        "dest": "/static_root/$1"
+      },
+      {
+        "src": "/(.*)",
+        "dest": "lhc_sharing/wsgi.py"
+      }
+    ]
+  }
