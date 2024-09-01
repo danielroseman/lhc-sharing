@@ -2,14 +2,23 @@
 {% load static %}
 {% block content %}
 
-<h1>{{ song.name }}</h1>
-<ul>
+<h1 class="mb-3">{{ song.name }}</h1>
+<table class="table song-table">
   {% for file in song.file_urls %}
-  <li class="file-list">
-    <a href="{{ file.url }}"><img src="{% static "file-earmark" %}{% if file.path.suffix == '.pdf' %}-pdf{% elif file.path.suffix == '.mp3' %}-music{% endif %}.svg" alt="{{ file.type.upper }} file" height="24px" width="24px"> {{ file.path.name }}</li>
+  <tr class="align-middle">
+    <td>
+      <a href="{{ file.url }}">
+        <img class="me-1" src="{% static "file-earmark" %}{% if file.path.suffix == '.pdf' %}-pdf{% elif file.path.suffix == '.mp3' %}-music{% endif %}.svg" alt="{{ file.type.upper }} file" height="24px" width="24px">{{ file.path.name }}
+      </a>
+    </td>
+    <td class="ps-3">
+      {% if file.path.suffix == '.mp3' %}<audio src="{{ file.url }}" controls>{% endif %}
+    </td>
+  </tr>
   {% endfor %}
-</ul>
+</table>
 
-
+<div class="mt-5">
 <a href="{% if song.current %}{% url "songs" %}{% else %}{% url "all_songs" %}{% endif %}">Back to songs list</a>
+</div>
 {% endblock %}

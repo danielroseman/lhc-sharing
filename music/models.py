@@ -30,7 +30,8 @@ class Song(models.Model):
         files = []
         for file in file_list:
             blob = gcs_bucket.blob(file)
-            signed_url = blob.generate_signed_url(expiration=timedelta(seconds=86400))
+            signed_url = blob.generate_signed_url(response_disposition="attachment",
+                                                  expiration=timedelta(seconds=86400))
             path = pathlib.Path(file)
             files.append({"url": signed_url, "path": path})
         return files
