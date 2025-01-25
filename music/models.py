@@ -30,8 +30,14 @@ class Song(models.Model):
         files = []
         for file in file_list:
             blob = gcs_bucket.blob(file)
+            path = pathlib.Path(file)
             signed_url = blob.generate_signed_url(response_disposition="attachment",
                                                   expiration=timedelta(seconds=86400))
-            path = pathlib.Path(file)
-            files.append({"url": signed_url, "path": path})
+            data = {"url": signed_url, "path": path}
+            if path.suffix == ".pdf":
+                preview_url = blob.generate_signed_url(response_disposition="inline",
+                                                       expiration=timedelta(seconds=86400))
+                data["preview"] = preview_url
+            files.append(data)
+        files.sort(key=lambda x: (x["path"].suffix, x["path"].name))
         return files

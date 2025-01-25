@@ -5,3 +5,10 @@
 li.file-list { list-style-type: none }
 
 table.song-table { width: initial }
+
+.modal-dialog {
+  height: 90%; /* = 90% of the .modal-backdrop block = %90 of the screen */
+}
+.modal-content {
+  height: 100%; /* = 100% of the .modal-dialog block */
+}

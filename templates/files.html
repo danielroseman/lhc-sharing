@@ -1,24 +1,74 @@
 {% extends "base.html" %}
 {% load static %}
+{% load music %}
 {% block content %}
 
 <h1 class="mb-3">{{ song.name }}</h1>
-<table class="table song-table">
+<div class="list-group">
   {% for file in song.file_urls %}
-  <tr class="align-middle">
-    <td>
+    <li class="list-group-item">
+      <div class="row align-items-center">
+      <div class="col-1">
+        <span class="badge bg-primary">{{ file.path.suffix.upper|slice:"1:" }}</span>
+      </div>
+
+      <div class="col-3">
       <a href="{{ file.url }}">
-        <img class="me-1" src="{% static "file-earmark" %}{% if file.path.suffix == '.pdf' %}-pdf{% elif file.path.suffix == '.mp3' %}-music{% endif %}.svg" alt="{{ file.type.upper }} file" height="24px" width="24px">{{ file.path.name }}
+        {{ file.path.stem|readable_name }}
       </a>
-    </td>
-    <td class="ps-3">
-      {% if file.path.suffix == '.mp3' %}<audio src="{{ file.url }}" controls>{% endif %}
-    </td>
-  </tr>
+      </div>
+      <div class="col-8">
+      {% if file.path.suffix == '.mp3' %}
+      <audio src="{{ file.url }}" controls>
+      {% elif file.path.suffix == '.pdf' %}
+      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#previewModal" data-bs-filename="{{ file.path.name }}" data-bs-url="{{ file.preview }}">View</button>
+      {% endif %}
+      </div>
+      </div>
+    </li>
   {% endfor %}
-</table>
+</ul>
 
 <div class="mt-5">
 <a href="{% if song.current %}{% url "songs" %}{% else %}{% url "all_songs" %}{% endif %}">Back to songs list</a>
 </div>
+
+<div class="modal fade" id="previewModal" tabindex="-1" aria-labelledby="previewModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="previewModalLabel">View</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <embed src="" type="application/pdf" frameborder="0" width="100%" height="100%">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script type="text/javascript">
+const previewModal = document.getElementById('previewModal')
+if (previewModal) {
+  previewModal.addEventListener('show.bs.modal', event => {
+    // Button that triggered the modal
+    const button = event.relatedTarget
+    // Extract info from data-bs-* attributes
+    const filename = button.getAttribute('data-bs-filename')
+    const url = button.getAttribute('data-bs-url')
+    // Update the modal's content.
+    const modalTitle = previewModal.querySelector('.modal-title')
+    const modalEmbed = previewModal.querySelector('embed')
+    modalEmbed.src = url
+    modalTitle.textContent = `View ${filename}`
+  })
+  // https://github.com/twbs/bootstrap/issues/41005
+  previewModal.addEventListener('hide.bs.modal', () => {
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
+  });
+}
+</script>
 {% endblock %}

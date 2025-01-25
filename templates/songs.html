@@ -2,12 +2,14 @@
 {% block content %}
 {% if current %}<h1>Current music</h1>{% else %}<h1>All music</h1>{% endif %}
 
+{% if not current %}
 <div class="mb-3">
   <input type="search" name="filter" incremental="incremental" class="textinput form-control" id="id_filter" placeholder="Search songs">
 </div>
+{% endif %}
 <ul id="songs">
   {% for song in song_list %}
-  <li><a href="{% url 'song_detail' slug=song.slug %}">{{ song.name }}</a></li>
+  <li class="list-group-item"><a href="{% url 'song_detail' slug=song.slug %}">{{ song.name }}</a></li>
   {% endfor %}
 </ul>
 
@@ -20,9 +22,9 @@
 {% endif %}
 </p>
 
+
+
 <script type="text/javascript">
-  const searchInput = document.getElementById("id_filter")
-  const songChoices = document.querySelectorAll('ul#songs li')
   function filter() {
     const query = searchInput.value.toLowerCase()
     songChoices.forEach(el => {
@@ -34,6 +36,10 @@
       }
     })
   }
-  searchInput.addEventListener('search', filter)
+  const searchInput = document.getElementById("id_filter")
+  const songChoices = document.querySelectorAll('ul#songs li')
+  if (searchInput) {
+    searchInput.addEventListener('search', filter)
+  }
 </script>
 {% endblock %}
