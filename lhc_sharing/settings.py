@@ -154,6 +154,7 @@ USE_TZ = True
 STATIC_URL = 'static/'
 STATIC_ROOT = "static_root/static"
 MEDIA_ROOT = 'media/'
+STATICFILES_DIRS = [BASE_DIR / "static"]
 
 BUCKET_NAME = "london-humanist-choir"
 
@@ -168,9 +169,8 @@ elif (creds := env('GS_ACCOUNT_JSON')):
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+DEFAULT_FROM_EMAIL = "LHC Members <chair@london.humanistchoir.org>"
 EMAIL_BACKEND = 'gmailapi_backend.mail.GmailBackend'
 GMAIL_API_CLIENT_ID = env("GMAIL_API_CLIENT_ID")
 GMAIL_API_CLIENT_SECRET = env("GMAIL_API_CLIENT_SECRET")
 GMAIL_API_REFRESH_TOKEN = env("GMAIL_API_REFRESH_TOKEN")
-
-STATICFILES_DIRS = [BASE_DIR / "static"]
