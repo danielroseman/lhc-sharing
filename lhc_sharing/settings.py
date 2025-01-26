@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     "crispy_bootstrap5",
     "direct_cloud_upload",
     'invitations',
+    'swingtime',
     'music'
 ]
 
