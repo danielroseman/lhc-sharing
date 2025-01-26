@@ -2,13 +2,25 @@
 {% block content %}
 <h1>Welcome to the London Humanist Choir!</h1>
 <img class="mt-4 mb-4" src="https://london.humanistchoir.org/wp-content/uploads/2024/05/Website-Header.png" alt="London Humanist Choir logo" width="100%" height="auto">
+{% if not user.is_authenticated %}
 <p>This is a site for members only. 
-{% if not user.is_authenticated %}<a href="{% url "account_login" %}">Click here to log in.</a>
-{% else %}<a href="{% url "songs" %}">Click here for our latest music list.</a>{% endif %}
+<a href="{% url "account_login" %}">Click here to log in.</a>
+<p>If you're not a member, <a href="https://london.humanistchoir.org">click here for our public site</a> for information about the choir and how to join.</p>
+{% else %}
+<p>
+<a href="{% url "songs" %}">Click here for our latest music list.</a>
 </p>
 
-<p>If you're not a member, <a href="https://london.humanistchoir.org">click here for our public site</a> for information about the choir and how to join.</p>
-
-
+<p>Upcoming events:</p>
+<ul>
+{% for event in occurrences %}
+    <li>{{ event.start_time|date:"l, F j, H:i" }}: {{ event.title }}
+    </li>
+{% endfor %}
+</ul>
+{% now "m" as month %}
+{% now "Y" as year %}
+<p>For more information, see our <a href="{% url "swingtime-monthly-view" year month %}">calendar page</a>.</p>
+{% endif %}
 
 {% endblock %}

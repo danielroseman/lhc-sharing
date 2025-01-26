@@ -1,3 +1,5 @@
+import datetime
+
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render
 from django.views.generic.list import ListView
@@ -5,9 +7,13 @@ from django.views.generic.detail import DetailView
 
 from music.models import Song
 
-# Create your views here.
+
 def home(request):
-    return render(request, 'home.html')
+    occurrences = Occurrence.objects.filter(
+        start_time__gte=datetime.datetime.now()
+    ).order_by("start_time")
+    return render(request, "home.html", {"occurrences": occurrences})
+
 
 class CurrentMusicList(LoginRequiredMixin, ListView):
     extra_context = {"current": True}
