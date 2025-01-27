@@ -17,7 +17,6 @@ Including another URLconf
 import direct_cloud_upload
 from django.contrib import admin
 from django.urls import include, path, re_path
-from swingtime import views as swingtime_views
 
 from music import views
 
@@ -32,7 +31,7 @@ urlpatterns = [
     path('song/<str:slug>', views.MusicDetail.as_view(), name='song_detail'),
     re_path(
         r"^calendar/(\d{4})/(0?[1-9]|1[012])/$",
-        swingtime_views.month_view,
+        views.month_view_notes,
         name="swingtime-monthly-view",
     ),
 ]

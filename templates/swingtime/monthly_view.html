@@ -29,8 +29,14 @@
                     {% if items %}
                     <ul class="list-unstyled">{% for item in items %}
                         <li>
-                                <span class="event-times">{{ item.start_time|time:"H:i" }}</span>
-                                {{ item.title }}</a>
+                            <span class="event-times">{{ item.start_time|time:"H:i" }}</span>
+                            {% with item.notes.all as notes %}
+                            {% if notes %}
+                            <a href="#" data-bs-toggle="tooltip" data-bs-title="{% for note in notes %}{{ note.note }}{% endfor %}">{{ item.title }}</a>
+                            {% else %}
+                            {{ item.title }}
+                            {% endif %}
+                            {% endwith %}
                         </li>{% endfor %}
                     </ul>
                     {% endif %}
@@ -41,4 +47,10 @@
             {% endfor %}
         </div>
     </div>
+{% endblock %}
+{% block extrascript %}
+<script>
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+</script>
 {% endblock %}

@@ -15,7 +15,12 @@
 <ul>
 {% for event in occurrences %}
     <li>{{ event.start_time|date:"l, F j, H:i" }}: {{ event.title }}
+        {% for note in event.notes.all %}
+            <br>{{ note.note }}
+        {% endfor %}
     </li>
+{% empty %}
+    <li>No upcoming events</li>
 {% endfor %}
 </ul>
 {% now "m" as month %}

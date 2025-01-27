@@ -1,12 +1,13 @@
 from direct_cloud_upload import CloudFileWidget, DdcuAdminMixin
 from django import forms
 from django.contrib import admin, messages
+from django.contrib.contenttypes.admin import GenericTabularInline
 from django.shortcuts import get_object_or_404
 from django.urls import path, reverse
 from django.utils.html import format_html
 from swingtime.admin import EventAdmin
 from swingtime.forms import ISO_WEEKDAYS_MAP, WEEKDAY_LONG
-from swingtime.models import Event
+from swingtime.models import Event, Note, Occurrence
 
 from music.models import DDCU_BUCKET_IDENTIFIER, Song
 
@@ -132,3 +133,17 @@ class EventAdmin(EventAdmin):
             ),
         ]
         return my_urls + urls
+
+
+class OccurrenceNoteInline(GenericTabularInline):
+    model = Note
+    extra = 1
+
+
+@admin.register(Occurrence)
+class OccurrenceAdmin(admin.ModelAdmin):
+    list_display = ("__str__", "start_time", "end_time", "event")
+    list_filter = ("event",)
+    search_fields = ("event__title",)
+    date_hierarchy = "start_time"
+    inlines = [OccurrenceNoteInline]

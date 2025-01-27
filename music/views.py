@@ -5,14 +5,18 @@ from django.shortcuts import render
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 from swingtime.models import Occurrence
+from swingtime.views import month_view
 
 from music.models import Song
 
 
 def home(request):
-    occurrences = Occurrence.objects.filter(
-        start_time__gte=datetime.datetime.now()
-    ).order_by("start_time")
+    occurrences = (
+        Occurrence.objects.filter(start_time__gte=datetime.datetime.now())
+        .select_related("event")
+        .prefetch_related("notes")
+        .order_by("start_time")
+    )
     return render(request, "home.html", {"occurrences": occurrences})
 
 
@@ -31,3 +35,8 @@ class MusicList(LoginRequiredMixin, ListView):
 class MusicDetail(LoginRequiredMixin, DetailView):
     template_name = "files.html"
     model = Song
+
+
+def month_view_notes(request, year, month):
+    qs = Occurrence.objects.select_related("event").prefetch_related("notes")
+    return month_view(request, year, month, queryset=qs)
