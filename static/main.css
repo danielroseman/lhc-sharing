@@ -12,3 +12,34 @@ table.song-table { width: initial }
 .modal-content {
   height: 100%; /* = 100% of the .modal-dialog block */
 }
+
+.month-view {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  font-size: calc(0.5rem + 0.5vw);
+}
+
+.month-view .day {
+  border: 0.5px solid var(--bs-gray-300);
+  overflow: hidden;
+  padding: 5px;
+  aspect-ratio: 2/3;
+}
+
+@media (min-width: 576px) {
+  .month-view .day {
+    aspect-ratio: 2;
+  }
+}
+
+
+.month-view-header {
+  background-color: var(--bs-gray-100);
+  text-align: center;
+  font-weight: bold;
+  padding: 5px;
+}
+
+.current-month .today {
+  background-color: rgba(255,220,40,.15);
+}
