@@ -23,9 +23,7 @@
     <li>No upcoming events</li>
 {% endfor %}
 </ul>
-{% now "m" as month %}
-{% now "Y" as year %}
-<p>For more information, see our <a href="{% url "swingtime-monthly-view" year month %}">calendar page</a>.</p>
+<p>For more information, see our <a href="{% url "swingtime-monthly-view" current_datetime.year current_datetime.month|stringformat:"02d" %}">calendar page</a>.</p>
 {% endif %}
 
 {% endblock %}
