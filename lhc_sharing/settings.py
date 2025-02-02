@@ -126,7 +126,7 @@ ACCOUNT_ADAPTER = "invitations.models.InvitationsAdapter"
 ACCOUNT_AUTHENTICATION_METHOD = "email"
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False
-ACCOUNT_EMAIL_SUBJECT_PREFIX = "[London Humanist Choir] "
+ACCOUNT_EMAIL_SUBJECT_PREFIX = EMAIL_SUBJECT_PREFIX = "[London Humanist Choir] "
 ACCOUNT_SIGNUP_FORM_CLASS = "music.forms.SignupForm"
 
 INVITATIONS_ACCEPT_INVITE_AFTER_SIGNUP = True
@@ -135,6 +135,8 @@ INVITATIONS_INVITATION_EXPIRY = 7
 INVITATIONS_INVITATION_ONLY = True
 
 LOGIN_REDIRECT_URL = "home"
+
+ADMINS = [("Chair", "chair@london.humanistchoir.org")]
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
