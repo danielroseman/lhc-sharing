@@ -1,0 +1,15 @@
+{% extends 'admin/change_form.html' %}
+
+{% block admin_change_form_document_ready %}
+{{ block.super }}
+<script>
+  const times = [
+    ['Midnight', 0],
+    ['7 a.m.', 7],
+    ['Noon', 12],
+    ['7 p.m.', 19],
+  ];
+  DateTimeShortcuts.clockHours.start_time_1 = times;
+  DateTimeShortcuts.clockHours.end_time_1 = times;
+</script>
+{% endblock %}
