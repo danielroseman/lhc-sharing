@@ -9,3 +9,4 @@ django-gmailapi-backend==0.3.2
 # django-direct-cloud-upload==0.3.0
 git+https://github.com/danielroseman/django-direct-cloud-upload
 django-swingtime==1.5.2
+Markdown==3.7

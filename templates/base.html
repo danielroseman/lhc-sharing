@@ -1,4 +1,4 @@
-{% load static %}
+{% load static flatpages %}
 <!doctype html>
 <html class="h-100" lang="en">
   <head>
@@ -26,6 +26,12 @@
           </button>
           <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
             <ul class="navbar-nav">
+              {% get_flatpages for user as flatpages %}
+              {% for page in flatpages %}
+              <li class="nav-item">
+                <a class="nav-link" href="{{ page.url }}">{{ page.title }}</a>
+              </li>
+              {% endfor %}
               {% if user.is_authenticated %}
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'songs' %}">Music list</a>

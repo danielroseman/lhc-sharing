@@ -34,4 +34,5 @@ urlpatterns = [
         views.month_view_notes,
         name="swingtime-monthly-view",
     ),
+    path('', include('django.contrib.flatpages.urls')),
 ]

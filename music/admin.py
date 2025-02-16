@@ -2,6 +2,9 @@ from direct_cloud_upload import CloudFileWidget, DdcuAdminMixin
 from django import forms
 from django.contrib import admin, messages
 from django.contrib.contenttypes.admin import GenericTabularInline
+from django.contrib.flatpages.admin import FlatPageAdmin
+from django.contrib.flatpages.models import FlatPage
+from django.db import models
 from django.shortcuts import get_object_or_404
 from django.urls import path, reverse
 from django.utils.html import format_html
@@ -147,3 +150,16 @@ class OccurrenceAdmin(admin.ModelAdmin):
     search_fields = ("event__title",)
     date_hierarchy = "start_time"
     inlines = [OccurrenceNoteInline]
+
+
+admin.site.unregister(FlatPage)
+
+@admin.register(FlatPage)
+class MarkdownxFlatPageAdmin(FlatPageAdmin):
+    class Media:
+        css = {"all": ("https://unpkg.com/tiny-markdown-editor/dist/tiny-mde.min.css",)}
+        js = (
+            "https://unpkg.com/tiny-markdown-editor/dist/tiny-mde.min.js",
+        )
+
+
