@@ -1,10 +1,10 @@
 from direct_cloud_upload import CloudFileWidget, DdcuAdminMixin
 from django import forms
 from django.contrib import admin, messages
+from django.contrib.admin import widgets as admin_widgets
 from django.contrib.contenttypes.admin import GenericTabularInline
 from django.contrib.flatpages.admin import FlatPageAdmin
 from django.contrib.flatpages.models import FlatPage
-from django.db import models
 from django.shortcuts import get_object_or_404
 from django.urls import path, reverse
 from django.utils.html import format_html
@@ -43,11 +43,11 @@ admin.site.unregister(Event)
 
 class RecurringEventForm(forms.Form):
     start_time = forms.SplitDateTimeField(
-        widget=admin.widgets.AdminSplitDateTime(),
+        widget=admin_widgets.AdminSplitDateTime(),
         help_text="The start time of the first occurrence to be added",
     )
     end_time = forms.SplitDateTimeField(
-        widget=admin.widgets.AdminSplitDateTime(),
+        widget=admin_widgets.AdminSplitDateTime(),
         help_text="The end time of the first occurrence to be added",
     )
     count = forms.IntegerField(
@@ -55,7 +55,7 @@ class RecurringEventForm(forms.Form):
     )
     until = forms.DateField(
         help_text="The date of the last occurrence to be added",
-        widget=admin.widgets.AdminDateWidget(),
+        widget=admin_widgets.AdminDateWidget(),
         required=False,
     )
     days = forms.TypedMultipleChoiceField(
@@ -75,7 +75,7 @@ class RecurringEventForm(forms.Form):
 
 
 @admin.register(Event)
-class EventAdmin(EventAdmin):
+class NewEventAdmin(EventAdmin):
     list_display = EventAdmin.list_display + ("add_occurence_link",)
 
     def add_occurence_link(self, obj):
@@ -153,6 +153,7 @@ class OccurrenceAdmin(admin.ModelAdmin):
 
 
 admin.site.unregister(FlatPage)
+
 
 @admin.register(FlatPage)
 class MarkdownxFlatPageAdmin(FlatPageAdmin):

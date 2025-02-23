@@ -1,0 +1,23 @@
+[tool.mypy]
+plugins = ["mypy_django_plugin.main"]
+
+[tool.django-stubs]
+django_settings_module = "lhc_sharing.settings"
+
+[[tool.mypy.overrides]]
+module = [
+  "allauth.*",
+  "direct_cloud_upload.*",
+  "environ.*",
+  "google.*",
+  "invitations.*",
+  "mailchimp_marketing.*",
+  "swingtime.*",
+]
+ignore_missing_imports = true
+
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I"]
+# ignore migration files
+exclude = ["**/migrations/*", "oauth2.py"]

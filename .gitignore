@@ -1,3 +1,4 @@
 .env
 env.prod
 media/
+static_root/
