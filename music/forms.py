@@ -1,4 +1,10 @@
+import logging
+
+import mailchimp_marketing
 from django import forms
+from django.conf import settings
+
+logger = logging.getLogger(__name__)
 
 GDPR_MESSAGE = (
     "I consent to my email address being added to the London Humanist Choir "
@@ -17,4 +23,19 @@ class SignupForm(forms.Form):
     )
 
     def signup(self, request, user):
-        pass
+        mailchimp = mailchimp_marketing.Client()
+        mailchimp.set_config({
+            "api_key": settings.MAILCHIMP_API_KEY,
+            "server": settings.MAILCHIMP_SERVER_PREFIX,
+        })
+        try:
+            mailchimp.lists.add_list_member(
+                settings.MAILCHIMP_LIST_ID,
+                {
+                    "email_address": user.email,
+                    "status": "subscribed",
+                    "merge_fields": {"FNAME": user.first_name, "LNAME": user.last_name},
+                },
+            )
+        except mailchimp_marketing.api_client.ApiClientError as e:
+            logger.exception("Mailchimp API error in signup")
