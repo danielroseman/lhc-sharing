@@ -1,3 +1,5 @@
+import datetime
+
 from direct_cloud_upload import CloudFileWidget, DdcuAdminMixin
 from django import forms
 from django.contrib import admin, messages
@@ -44,10 +46,10 @@ admin.site.unregister(Event)
 class RecurringEventForm(forms.Form):
     start_time = forms.SplitDateTimeField(
         widget=admin_widgets.AdminSplitDateTime(),
-        help_text="The start time of the first occurrence to be added",
+        help_text="The start date and time of the first occurrence to be added",
     )
-    end_time = forms.SplitDateTimeField(
-        widget=admin_widgets.AdminSplitDateTime(),
+    end_time = forms.TimeField(
+        widget=admin_widgets.AdminTimeWidget(),
         help_text="The end time of the first occurrence to be added",
     )
     count = forms.IntegerField(
@@ -71,6 +73,17 @@ class RecurringEventForm(forms.Form):
             raise forms.ValidationError(
                 "You can't specify both a count and an end date"
             )
+        cleaned_data['end'] = datetime.datetime.combine(
+            cleaned_data["start_time"].date(),
+            cleaned_data["end_time"],
+            cleaned_data["start_time"].tzinfo,
+        )
+        if cleaned_data.get("until"):
+            cleaned_data['until'] = datetime.datetime.combine(
+                cleaned_data["until"],
+                cleaned_data["end_time"],
+                cleaned_data["start_time"].tzinfo,
+            )
         return cleaned_data
 
 
@@ -92,7 +105,7 @@ class NewEventAdmin(EventAdmin):
                 count_before = event.occurrence_set.count()
                 event.add_occurrences(
                     start_time=form.cleaned_data["start_time"],
-                    end_time=form.cleaned_data["end_time"],
+                    end_time=form.cleaned_data["end"],
                     count=form.cleaned_data.get("count"),
                     until=form.cleaned_data.get("until"),
                     byweekday=[
