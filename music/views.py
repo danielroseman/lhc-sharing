@@ -1,5 +1,6 @@
 import datetime
 
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render
 from django.views.generic.detail import DetailView
@@ -37,6 +38,7 @@ class MusicDetail(LoginRequiredMixin, DetailView):
     model = Song
 
 
+@login_required
 def month_view_notes(request, year, month):
     qs = Occurrence.objects.select_related("event").prefetch_related("notes")
     return month_view(request, year, month, queryset=qs)
