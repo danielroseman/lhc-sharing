@@ -15,14 +15,24 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 import direct_cloud_upload
+from allauth.account import views as allauth_views
 from django.contrib import admin
-from django.urls import include, path, re_path
+from django.contrib.auth.decorators import login_required
+from django.urls import include, path, re_path, reverse_lazy
 
 from music import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("invitations/", include('invitations.urls', namespace='invitations')),
+    path('accounts/password/change/',
+      login_required(
+         allauth_views.PasswordChangeView.as_view(
+             success_url=reverse_lazy('home')
+         )
+      ),
+      name='account_change_password',
+    ),
     path('accounts/', include('allauth.urls')),
     path('direct_cloud_upload/', include(direct_cloud_upload.urlpatterns)),
     path('', views.home, name='home'),

@@ -1,0 +1,7 @@
+{% extends "account/email/base.html" %}
+{% block content %}
+<p> You ({{ email }}) have been invited to join {{ site_name }}.</p>
+
+<p> If you'd like to join, please go to <a href="{{ invite_url }}">{{ invite_url }}</a>.</p>
+{% endblock %}
+
