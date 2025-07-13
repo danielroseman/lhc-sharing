@@ -14,6 +14,7 @@ table.song-table { width: initial }
 }
 
 .month-view {
+  border: 0.5px solid var(--bs-body-color);
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   font-size: calc(0.5rem + 0.5vw);
@@ -22,18 +23,19 @@ table.song-table { width: initial }
 .month-view .day {
   border: 0.5px solid var(--bs-gray-300);
   overflow: hidden;
-  padding: 5px;
+  padding: 5px 10px 5px 5px;
   aspect-ratio: 2/3;
 }
 
 @media (min-width: 576px) {
   .month-view .day {
-    aspect-ratio: 2;
+    aspect-ratio: 1.5;
   }
 }
 
 
 .month-view-header {
+  border-bottom: 0.5px solid var(--bs-body-color);
   background-color: var(--bs-gray-100);
   text-align: center;
   font-weight: bold;
