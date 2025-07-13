@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load music %}
 {% block title %}Monthly View{% endblock %}
 {% block content %}
     <h3>Calendar</h3>
@@ -33,9 +34,9 @@
                     <ul class="list-unstyled">{% for item in items %}
                         <li>
                             <span class="event-times">{{ item.start_time|time:"H:i" }}</span>
-                            {% with item.notes.all as notes %}
-                            {% if notes %}
-                            <a href="#" data-bs-toggle="tooltip" data-bs-title="{% for note in notes %}{{ note.note }}{% endfor %}">{{ item.title }}</a>
+                            {% with notes=item.notes.all event_notes=item.event.notes.all %}
+                            {% if notes or event_notes %}
+                            <a href="#" data-bs-toggle="popover" data-bs-html="true" data-bs-trigger="focus" data-bs-title="{{ item.title }}" data-bs-content="{% for note in event_notes %}{{ note.note|markdown }}{% endfor %}{% for note in notes %}{{ note.note|markdown }}{% endfor %}">{{ item.title }}</a>
                             {% else %}
                             {{ item.title }}
                             {% endif %}
@@ -68,7 +69,7 @@
 {% endblock %}
 {% block extrascript %}
 <script>
-    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
-    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+    const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
+const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl))
 </script>
 {% endblock %}

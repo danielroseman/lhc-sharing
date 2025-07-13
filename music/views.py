@@ -40,5 +40,7 @@ class MusicDetail(LoginRequiredMixin, DetailView):
 
 @login_required
 def month_view_notes(request, year, month):
-    qs = Occurrence.objects.select_related("event").prefetch_related("notes")
+    qs = Occurrence.objects.select_related("event").prefetch_related(
+        "notes", "event__notes"
+    )
     return month_view(request, year, month, queryset=qs)
