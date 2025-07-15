@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load music %}
+
+{% block content %}
+<h1>{{ occurrence.title }}</h1>
+
+<p><b>Start time</b>: {{ occurrence.start_time|date:"l, F j, H:i" }}</p>
+<p><b>End time</b>: {{ occurrence.end_time|date:"l, F j, H:i" }}</p>
+
+{% with notes=occurrence.notes.all event_notes=occurrence.event.notes.all %}
+{% if notes or event_notes %}
+{% for note in event_notes %}
+{{ note.note|markdown }}
+{% endfor %}
+{% for note in notes %}
+{{ note.note|markdown }}
+{% endfor %}
+{% endif %}
+{% endwith %}
+
+<p><a href="{% url 'swingtime-monthly-view' occurrence.start_time.year occurrence.start_time.month|stringformat:"02d" %}">Back to calendar</a></p>
+
+{% endblock %}

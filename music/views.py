@@ -53,3 +53,14 @@ def month_view_notes(request, year, month):
         "notes", "event__notes"
     )
     return month_view(request, year, month, queryset=qs)
+
+@login_required
+def swingtime_occurrence(request, event_id, occurrence_id):
+    occurrence = Occurrence.objects.select_related("event").get(
+        id=occurrence_id, event__id=event_id
+    )
+    return render(
+        request,
+        "swingtime/occurrence.html",
+        {"occurrence": occurrence, "event": occurrence.event},
+    )
