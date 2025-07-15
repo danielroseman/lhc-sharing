@@ -2,7 +2,7 @@
 {% load music %}
 {% block title %}Monthly View{% endblock %}
 {% block content %}
-    <h3>Calendar</h3>
+    <h2>Calendar</h2>
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h4 class="mb-0"> {{ this_month|date:"F Y" }} </h4>
         <div>
@@ -17,7 +17,7 @@
             </div>
         </div>
     </div>
-    <div class="mb-3 month-view{% if this_month.month == today.month and this_month.year == today.year %} current-month{% endif %}">
+    <div class="mb-4 month-view{% if this_month.month == today.month and this_month.year == today.year %} current-month{% endif %}" aria-details="events-list">
           <div class='month-view-header'>Sun</div>
           <div class='month-view-header'>Mon</div>
           <div class='month-view-header'>Tue</div>
@@ -36,7 +36,15 @@
                             <span class="event-times">{{ item.start_time|time:"H:i" }}</span>
                             {% with notes=item.notes.all event_notes=item.event.notes.all %}
                             {% if notes or event_notes %}
-                            <a href="#" data-bs-toggle="popover" data-bs-html="true" data-bs-trigger="focus" data-bs-title="{{ item.title }}" data-bs-content="{% for note in event_notes %}{{ note.note|markdown }}{% endfor %}{% for note in notes %}{{ note.note|markdown }}{% endfor %}">{{ item.title }}</a>
+                            <a
+                                href="{% url 'swingtime_occurrence' item.event_id item.id %}"
+                                data-bs-toggle="popover"
+                                data-bs-html="true"
+                                data-bs-container=".month-view"
+                                data-bs-trigger="hover focus"
+                                data-bs-title="{{ item.title }}"
+                                data-bs-content="{% for note in event_notes %}{{ note.note|markdown }}{% endfor %}{% for note in notes %}{{ note.note|markdown }}{% endfor %}">{{ item.title }}
+                            </a>
                             {% else %}
                             {{ item.title }}
                             {% endif %}
@@ -50,11 +58,13 @@
             {% endfor %}
         </div>
     </div>
-    <ul>
+    <div id="events-list">
+    <h3>Events for {{ this_month|date:"F Y" }}</h3>
+    <ul class="list-unstyled">
     {% for row in calendar %}
         {% for day, items in row %}
             {% for event in items %}
-                <li>{{ event.start_time|date:"l, F j, H:i" }}: {{ event.title }}
+            <li>{{ event.start_time|date:"l, F j, H:i" }}: <a href="{% url 'swingtime_occurrence' event.event.id event.id %}">{{ event.title }}</a>
                     {% for note in event.notes.all %}
                         <br>{{ note.note }}
                     {% endfor %}
@@ -66,10 +76,11 @@
         <li>No upcoming events</li>
     {% endfor %}
     </ul>
+    </div>
 {% endblock %}
 {% block extrascript %}
 <script>
     const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
-const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl))
+    const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl))
 </script>
 {% endblock %}
