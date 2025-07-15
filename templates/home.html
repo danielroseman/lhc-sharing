@@ -11,18 +11,18 @@
 <a href="{% url "songs" %}">Click here for our latest music list.</a>
 </p>
 
-<p>Upcoming events:</p>
+
+{% if next_rehearsal %}
+<p>Next rehearsal: {{ next_rehearsal.start_time|date:"l, F j, H:i" }}.</p>
+{% endif %}
+{% if upcoming_performances %}
+<p>Upcoming performances:</p>
 <ul>
-{% for event in occurrences %}
-    <li>{{ event.start_time|date:"l, F j, H:i" }}: {{ event.title }}
-        {% for note in event.notes.all %}
-            <br>{{ note.note }}
-        {% endfor %}
-    </li>
-{% empty %}
-    <li>No upcoming events</li>
+{% for performance in upcoming_performances %}
+<li>{{ performance.title }} on {{ performance.start_time|date:"l, F j, H:i" }}.</li>
 {% endfor %}
 </ul>
+{% endif %}
 <p>For more information, see our <a href="{% url "swingtime-monthly-view" current_datetime.year current_datetime.month|stringformat:"02d" %}">calendar page</a>.</p>
 {% endif %}
 

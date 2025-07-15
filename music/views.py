@@ -18,7 +18,16 @@ def home(request):
         .prefetch_related("notes")
         .order_by("start_time")
     )
-    return render(request, "home.html", {"occurrences": occurrences})
+    next_rehearsal = occurrences.filter(event__event_type__abbr="R").first()
+    upcoming_performances = occurrences.filter(event__event_type__abbr="P")
+    return render(
+        request,
+        "home.html",
+        {
+            "next_rehearsal": next_rehearsal,
+            "upcoming_performances": upcoming_performances,
+        },
+    )
 
 
 class CurrentMusicList(LoginRequiredMixin, ListView):
