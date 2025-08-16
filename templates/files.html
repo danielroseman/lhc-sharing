@@ -29,9 +29,21 @@
       </div>
     </li>
   {% endfor %}
+  {% if song.embed %}
+    <li class="list-group-item">
+      <div class="row align-items-center">
+        <div class="col-2 col-sm-1">
+          <span class="badge bg-primary">EMBED</span>
+        </div>
+        <div class="col-6 col-sm-6">
+          {{ song.embed|safe }}
+        </div>
+      </div>
+    </li>
+  {% endif %}
 </ul>
 
-<div class="mt-5">
+<div class="mt-5 mb-3">
 <a href="{% if song.current %}{% url "songs" %}{% else %}{% url "all_songs" %}{% endif %}">Back to songs list</a>
 </div>
 

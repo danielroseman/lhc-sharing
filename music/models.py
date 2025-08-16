@@ -5,6 +5,7 @@ from datetime import timedelta
 from direct_cloud_upload import register_gcs_bucket
 from django.conf import settings
 from django.db import models
+from django.urls import reverse
 from django.utils import timezone
 from google.cloud import storage
 
@@ -21,9 +22,16 @@ class Song(models.Model):
         default=True, help_text="Show in list of current songs"
     )
     files = models.TextField(blank=True)
+    embed = models.TextField(
+        blank=True,
+        help_text="Embed code for the song, e.g., a YouTube link or MuseScore embed",
+    )
 
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse("song_detail", kwargs={"slug": self.slug})
 
     @property
     def file_urls(self):

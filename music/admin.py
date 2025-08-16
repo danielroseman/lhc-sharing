@@ -20,7 +20,7 @@ from music.models import DDCU_BUCKET_IDENTIFIER, Song
 class SongForm(forms.ModelForm):
     class Meta:
         model = Song
-        fields = ["name", "slug", "created_at", "current", "files"]
+        fields = ["name", "slug", "created_at", "current", "files", "embed"]
 
         widgets = {
             "files": CloudFileWidget(
