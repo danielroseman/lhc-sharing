@@ -71,6 +71,9 @@ class Occurrence(models.Model):
     class Meta:
         ordering = ["start_time"]
 
+    def __str__(self):
+        return f"{self.event.title} on {self.start_time.strftime('%Y-%m-%d %H:%M')}"
+
     @property
     def title(self):
         return self.event.title
