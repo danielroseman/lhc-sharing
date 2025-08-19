@@ -38,14 +38,16 @@ class EventTypeAdmin(admin.ModelAdmin):
     pass
 
 
-class RecurringEventForm(forms.Form):
+class RecurringEventForm(forms.ModelForm):
     start_time = forms.SplitDateTimeField(
         widget=admin_widgets.AdminSplitDateTime(),
         help_text="The start date and time of the first occurrence to be added",
+        required=False,
     )
     end_time = forms.TimeField(
         widget=admin_widgets.AdminTimeWidget(),
         help_text="The end time of the first occurrence to be added",
+        required=False,
     )
     count = forms.IntegerField(
         help_text="The number of occurrences to be added", required=False
@@ -60,6 +62,7 @@ class RecurringEventForm(forms.Form):
         help_text="The days of the week the event occurs on",
         widget=forms.CheckboxSelectMultiple,
         coerce=int,
+        required=False,
     )
     location = forms.CharField(
         max_length=255,
@@ -73,11 +76,12 @@ class RecurringEventForm(forms.Form):
             raise forms.ValidationError(
                 "You can't specify both a count and an end date"
             )
-        cleaned_data['end'] = datetime.datetime.combine(
-            cleaned_data["start_time"].date(),
-            cleaned_data["end_time"],
-            cleaned_data["start_time"].tzinfo,
-        )
+        if cleaned_data.get("start_time") and cleaned_data.get("end_time"):
+            cleaned_data['end'] = datetime.datetime.combine(
+                cleaned_data["start_time"].date(),
+                cleaned_data["end_time"],
+                cleaned_data["start_time"].tzinfo,
+            )
         if cleaned_data.get("until"):
             cleaned_data['until'] = datetime.datetime.combine(
                 cleaned_data["until"],
@@ -99,6 +103,23 @@ class EventAdmin(admin.ModelAdmin):
     list_filter = ("event_type",)
     search_fields = ("title", "description")
     inlines = [OccurrenceInline]
+    form = RecurringEventForm
+    fieldsets = (
+        (None, {"fields": ("title", "description", "event_type", "details")}),
+        (
+            "Recurring Event",
+            {
+                "fields": (
+                    "start_time",
+                    "end_time",
+                    "count",
+                    "until",
+                    "days",
+                    "location",
+                )
+            },
+        ),
+    )
 
     def add_occurence_link(self, obj):
         return format_html(
