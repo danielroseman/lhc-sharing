@@ -45,3 +45,9 @@ table.song-table { width: initial }
 .current-month .today {
   background-color: rgba(255,220,40,.15);
 }
+
+.event-item-all-day {
+  background-color: var(--bs-gray-200);
+  border-radius: 5px;
+  padding: 2px;
+}

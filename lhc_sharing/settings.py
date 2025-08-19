@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     "invitations",
     "swingtime",
     "music",
+    "events",
 ]
 
 

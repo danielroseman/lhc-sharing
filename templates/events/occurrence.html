@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load music %}
+
+{% block content %}
+<h1>{{ occurrence.title }}</h1>
+
+{% if occurrence.all_day %}
+<p><b>Date</b>: {{ occurrence.start_time|date:"l, F j" }}</p>
+{% else %}
+<p><b>Start time</b>: {{ occurrence.start_time|date:"l, F j, H:i" }}</p>
+<p><b>End time</b>: {{ occurrence.end_time|date:"l, F j, H:i" }}</p>
+{% endif %}
+
+{{ occurrence.all_details|markdown }}
+
+<p><a href="{% url 'event-monthly-view' occurrence.start_time.year occurrence.start_time.month|stringformat:"02d" %}">Back to calendar</a></p>
+
+{% endblock %}

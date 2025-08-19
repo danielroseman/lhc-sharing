@@ -37,7 +37,7 @@
                 <a class="nav-link" href="{% url 'songs' %}">Music list</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="{% url "swingtime-monthly-view" current_datetime.year current_datetime.month|stringformat:"02d" %}">Calendar</a>
+                <a class="nav-link" href="{% url "event-monthly-view" current_datetime.year current_datetime.month|stringformat:"02d" %}">Calendar</a>
               </li>
               {% if user.is_staff %}
               <li class="nav-item">

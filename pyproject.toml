@@ -12,7 +12,6 @@ module = [
   "google.*",
   "invitations.*",
   "mailchimp_marketing.*",
-  "swingtime.*",
 ]
 ignore_missing_imports = true
 

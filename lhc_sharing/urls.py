@@ -21,6 +21,7 @@ from django.contrib import admin
 from django.contrib.auth.decorators import login_required
 from django.urls import include, path, re_path, reverse_lazy
 
+from events import views as events_views
 from music import views
 
 urlpatterns = [
@@ -41,13 +42,13 @@ urlpatterns = [
     path("song/<str:slug>", views.MusicDetail.as_view(), name="song_detail"),
     re_path(
         r"^calendar/(\d{4})/(0?[1-9]|1[012])/$",
-        views.month_view_notes,
-        name="swingtime-monthly-view",
+        events_views.month_view_notes,
+        name="event-monthly-view",
     ),
     path(
         "calendar/occurrence/<int:event_id>/<int:occurrence_id>/",
-        views.swingtime_occurrence,
-        name="swingtime_occurrence",
+        events_views.event_occurrence,
+        name="event-occurrence",
     ),
     path("", include('django.contrib.flatpages.urls')),
 ]

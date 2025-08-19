@@ -13,3 +13,12 @@ def readable_name(value):
 @register.filter
 def markdown(value):
     return mark_safe(md.markdown(value))
+
+
+@register.inclusion_tag("swingtime/event_notes.html")
+def event_notes(occurrence):
+    return {
+        "occurrence": occurrence,
+        "notes": occurrence.notes.all(),
+        "event_notes": occurrence.event.notes.all(),
+    }

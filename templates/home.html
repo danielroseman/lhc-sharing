@@ -19,11 +19,11 @@
 <p>Upcoming performances:</p>
 <ul>
 {% for performance in upcoming_performances %}
-<li>{{ performance.title }} on {{ performance.start_time|date:"l, F j, H:i" }}.</li>
+<li>{{ performance.title }} on {% if performance.all_day %}{{ performance.start_time|date:"l, F j" }}{% else %}{{ performance.start_time|date:"l, F j, H:i" }}{% endif %}.</li>
 {% endfor %}
 </ul>
 {% endif %}
-<p>For more information, see our <a href="{% url "swingtime-monthly-view" current_datetime.year current_datetime.month|stringformat:"02d" %}">calendar page</a>.</p>
+<p>For more information, see our <a href="{% url "event-monthly-view" current_datetime.year current_datetime.month|stringformat:"02d" %}">calendar page</a>.</p>
 {% endif %}
 
 {% endblock %}
