@@ -14,6 +14,9 @@
 
 {% if next_rehearsal %}
 <p>Next rehearsal: {{ next_rehearsal.start_time|date:"l, F j, H:i" }}.</p>
+<p>Sign up to open or close rehearsals <a href="{% url "occurrence_signup_grid" next_rehearsal.event.id %}">here</a>.</p>
+{% endif %}
+{% if recent_performances %}
 {% endif %}
 {% if upcoming_performances %}
 <p>Upcoming performances:</p>

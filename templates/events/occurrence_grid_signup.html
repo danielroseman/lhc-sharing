@@ -1,0 +1,52 @@
+<!-- templates/events/occurrence_grid_signup.html -->
+
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>Rehearsal sign up</h2>
+  <h3>{{ event.description }}</h3>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Open</th>
+        <th>Close</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for occ in occurrences %}
+        <tr>
+          <td>{{ occ.start_time|date:"l, F j, H:i"  }}</td>
+          <td>
+            {% if occ.opener %}
+              {{ occ.opener.get_full_name|default:occ.opener.username }}
+            {% else %}
+              <form method="post" style="display:inline;">
+                {% csrf_token %}
+                <input type="hidden" name="occurrence_id" value="{{ occ.id }}">
+                <input type="hidden" name="role" value="opener">
+                <button type="submit" class="btn btn-sm btn-outline-primary">Sign up</button>
+              </form>
+            {% endif %}
+          </td>
+          <td>
+            {% if occ.closer %}
+              {{ occ.closer.get_full_name|default:occ.closer.username }}
+            {% else %}
+              <form method="post" style="display:inline;">
+                {% csrf_token %}
+                <input type="hidden" name="occurrence_id" value="{{ occ.id }}">
+                <input type="hidden" name="role" value="closer">
+                <button type="submit" class="btn btn-sm btn-outline-success">Sign up</button>
+              </form>
+            {% endif %}
+          </td>
+        </tr>
+      {% empty %}
+        <tr><td colspan="3">No upcoming rehearsals found.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}
+

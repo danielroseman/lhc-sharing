@@ -61,6 +61,7 @@
         </div>
     </div>
     <div id="events-list">
+    {% if occurrences %}
     <h3>Events for {{ this_month|date:"F Y" }}</h3>
     <ul class="list-unstyled">
     {% for row in calendar %}
@@ -74,10 +75,11 @@
                 {% endfor %}
                 {% endfor %}
 
-    {% empty %}
-        <li>No upcoming events</li>
-    {% endfor %}
     </ul>
+    {% endfor %}
+    {% else %}
+        <p>No events this month</p>
+    {% endif %}
     </div>
 {% endblock %}
 {% block extrascript %}

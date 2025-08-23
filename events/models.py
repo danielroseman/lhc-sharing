@@ -1,6 +1,5 @@
 from dateutil import rrule
 from django.db import models
-from django.urls import reverse
 
 
 # TODO: replace with hard-coded choice field?
@@ -13,9 +12,7 @@ class EventType(models.Model):
 
 class Event(models.Model):
     title = models.CharField(max_length=255)
-    description = models.CharField(
-        max_length=255, blank=True, help_text="Internal description, not published"
-    )
+    description = models.CharField(max_length=255, blank=True)
     event_type = models.ForeignKey(EventType, on_delete=models.CASCADE)
     details = models.TextField(blank=True)
 
@@ -67,6 +64,20 @@ class Occurrence(models.Model):
     end_time = models.DateTimeField(blank=True, null=True)
     all_day = models.BooleanField(default=False)
     details = models.TextField(blank=True)
+    opener = models.ForeignKey(
+        "auth.User",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="opener_occurrences",
+    )
+    closer = models.ForeignKey(
+        "auth.User",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="closer_occurrences",
+    )
 
     class Meta:
         ordering = ["start_time"]
@@ -84,6 +95,14 @@ class Occurrence(models.Model):
 
     @property
     def all_details(self):
-        return "\n\n".join(
-            filter(None, [self.event.details, self.location, self.details])
-        )
+        details = [self.event.details, self.location, self.details]
+        open_close = []
+        if self.opener:
+            open_close.append(f"Open: {self.opener.first_name} {self.opener.last_name}")
+        if self.opener:
+            open_close.append(
+                f"Close: {self.closer.first_name} {self.closer.last_name}"
+            )
+        if open_close:
+            details.append("  \n".join(open_close))
+        return "\n\n".join(filter(None, details))

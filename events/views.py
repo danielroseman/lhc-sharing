@@ -3,10 +3,10 @@ import itertools
 from datetime import datetime, timedelta
 
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.utils import timezone
 
-from events.models import Occurrence
+from events.models import Event, Occurrence
 
 
 @login_required
@@ -25,15 +25,16 @@ def month_view_notes(request, year, month):
     def start_day(o):
         return o.start_time.astimezone(current_timezone).day
 
-    by_day = dict(
-        [(dt, list(o)) for dt, o in itertools.groupby(occurrences, start_day)]
-    )
+    by_day = dict([
+        (dt, list(o)) for dt, o in itertools.groupby(occurrences, start_day)
+    ])
     data = {
         "today": datetime.now(),
         "calendar": [[(d, by_day.get(d, [])) for d in row] for row in cal],
         "this_month": dtstart,
         "next_month": dtstart + timedelta(days=+last_day),
         "last_month": dtstart + timedelta(days=-1),
+        "occurrences": occurrences,
     }
 
     return render(request, "events/monthly_view.html", data)
@@ -48,4 +49,32 @@ def event_occurrence(request, event_id, occurrence_id):
         request,
         "events/occurrence.html",
         {"occurrence": occurrence, "event": occurrence.event},
+    )
+
+
+@login_required
+def occurrence_grid_signup(request, event_id):
+    if request.method == "POST":
+        occurrence_id = request.POST.get("occurrence_id")
+        role = request.POST.get("role")  # 'opener' or 'closer'
+
+        try:
+            occurrence = Occurrence.objects.get(id=occurrence_id)
+            if role == "opener" and occurrence.opener is None:
+                occurrence.opener = request.user
+                occurrence.save()
+            elif role == "closer" and occurrence.closer is None:
+                occurrence.closer = request.user
+                occurrence.save()
+        except Occurrence.DoesNotExist:
+            pass
+
+        return redirect("occurrence_signup_grid", event_id=event_id)
+
+    event = Event.objects.get(id=event_id)
+    occurrences = event.occurrence_set.filter(start_time__gte=timezone.now())
+    return render(
+        request,
+        "events/occurrence_grid_signup.html",
+        {"event": event, "occurrences": occurrences},
     )

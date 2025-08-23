@@ -50,5 +50,10 @@ urlpatterns = [
         events_views.event_occurrence,
         name="event-occurrence",
     ),
-    path("", include('django.contrib.flatpages.urls')),
+    path(
+        "events/signup/<int:event_id>/",
+        events_views.occurrence_grid_signup,
+        name="occurrence_signup_grid",
+    ),
+    path("", include("django.contrib.flatpages.urls")),
 ]

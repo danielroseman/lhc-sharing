@@ -104,10 +104,37 @@ class RecurringEventForm(forms.ModelForm):
         return cleaned_data
 
 
-class OccurrenceInline(admin.TabularInline):
+class InlineOccurrenceForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in ('opener', 'closer'):
+            self.fields[field].widget.can_add_related = False
+            self.fields[field].widget.can_change_related = False
+            self.fields[field].widget.can_delete_related = False
+
+
+class OccurrenceInline(admin.StackedInline):
     model = Occurrence
     extra = 1
-    fields = ("start_time", "end_time", "location", "all_day", "details")
+    fieldsets = (
+        (
+            None,
+            {
+                "fields": (
+                    "start_time", "end_time", "all_day",
+                    "location", "details",
+                ),
+                "classes": ["grid-layout"],
+            },
+        ),
+        (
+            None,
+            {
+                "fields": (("opener", "closer"),),
+            },
+        ),
+    )
+    form = InlineOccurrenceForm
 
 
 @admin.register(Event)
@@ -144,22 +171,19 @@ class EventAdmin(admin.ModelAdmin):
     def save_model(self, request, obj, form, change):
         super().save_model(request, obj, form, change)
         if form.cleaned_data.get("start_time") and form.cleaned_data.get("end_time"):
-
             obj.add_occurrences(
                 start_time=form.cleaned_data["start_time"],
                 end_time=form.cleaned_data["end"],
                 count=form.cleaned_data.get("count"),
                 until=form.cleaned_data.get("until"),
-                byweekday=[
-                    ISO_WEEKDAYS_MAP[day] for day in form.cleaned_data["days"]
-                ],
+                byweekday=[ISO_WEEKDAYS_MAP[day] for day in form.cleaned_data["days"]],
                 location=form.cleaned_data.get("location", ""),
             )
 
 
 @admin.register(Occurrence)
 class OccurrenceAdmin(admin.ModelAdmin):
-    list_display = ("__str__", "start_time", "end_time", "location", "event")
+    list_display = ("__str__", "start_time", "end_time", "all_day", "location", "event")
     list_filter = ("event",)
     search_fields = ("event__title",)
     date_hierarchy = "start_time"
