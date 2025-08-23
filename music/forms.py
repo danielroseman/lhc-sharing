@@ -1,3 +1,4 @@
+import json
 import logging
 
 import mailchimp_marketing
@@ -38,4 +39,8 @@ class SignupForm(forms.Form):
                 },
             )
         except mailchimp_marketing.api_client.ApiClientError as e:
-            logger.exception("Mailchimp API error in signup")
+            data = json.loads(e.text)
+            if data.get("title") == "Member Exists":
+                logger.info("User %s already in Mailchimp list", user.email)
+            else:
+                logger.exception("Mailchimp API error in signup: %s", data['detail'])
