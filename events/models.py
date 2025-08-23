@@ -99,7 +99,7 @@ class Occurrence(models.Model):
         open_close = []
         if self.opener:
             open_close.append(f"Open: {self.opener.first_name} {self.opener.last_name}")
-        if self.opener:
+        if self.closer:
             open_close.append(
                 f"Close: {self.closer.first_name} {self.closer.last_name}"
             )
