@@ -29,7 +29,7 @@ def month_view_notes(request, year, month):
         (dt, list(o)) for dt, o in itertools.groupby(occurrences, start_day)
     ])
     data = {
-        "today": datetime.now(),
+        "today": timezone.now(),
         "calendar": [[(d, by_day.get(d, [])) for d in row] for row in cal],
         "this_month": dtstart,
         "next_month": dtstart + timedelta(days=+last_day),

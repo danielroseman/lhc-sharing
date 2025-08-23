@@ -3,9 +3,6 @@ from django import forms
 from django.contrib import admin
 from django.contrib.flatpages.admin import FlatPageAdmin
 from django.contrib.flatpages.models import FlatPage
-from swingtime.admin import EventAdmin
-from swingtime.forms import ISO_WEEKDAYS_MAP, WEEKDAY_LONG
-from swingtime.models import Event, Note, Occurrence
 
 from music.models import DDCU_BUCKET_IDENTIFIER, Song
 
