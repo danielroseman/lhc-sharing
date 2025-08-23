@@ -14,7 +14,7 @@
 
 {% if next_rehearsal %}
 <p>Next rehearsal: {{ next_rehearsal.start_time|date:"l, F j, H:i" }}.</p>
-<p>Sign up to open or close rehearsals <a href="{% url "occurrence_signup_grid" next_rehearsal.event.id %}">here</a>.</p>
+<p><a href="{% url "occurrence_signup_grid" next_rehearsal.event.id %}">Sign up here</a> to open or close rehearsals.</p>
 {% endif %}
 {% if recent_performances %}
 {% endif %}
@@ -26,7 +26,9 @@
 {% endfor %}
 </ul>
 {% endif %}
-<p>For more information, see our <a href="{% url "event-monthly-view" current_datetime.year current_datetime.month|stringformat:"02d" %}">calendar page</a>.</p>
+{% now "Y" as current_year %}
+{% now "m" as current_month %}
+<p>For more information, see our <a href="{% url "event-monthly-view" current_year current_month %}">calendar page</a>.</p>
 {% endif %}
 
 {% endblock %}
