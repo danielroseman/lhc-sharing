@@ -26,6 +26,8 @@ class SongForm(forms.ModelForm):
 class SongAdmin(DdcuAdminMixin):
     list_display = ("name", "current")
     list_editable = ["current"]
+    list_filter = ("current",)
+    ordering = ("name",)
     form = SongForm
     prepopulated_fields = {"slug": ["name"]}
 
