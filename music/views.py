@@ -1,7 +1,6 @@
-import datetime
-
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render
+from django.utils import timezone
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 
@@ -11,7 +10,7 @@ from music.models import Song
 
 def home(request):
     occurrences = (
-        Occurrence.objects.filter(start_time__gte=datetime.datetime.now())
+        Occurrence.objects.filter(start_time__gte=timezone.now())
         .select_related("event")
         .order_by("start_time")
     )
