@@ -64,19 +64,11 @@
     {% if occurrences %}
     <h3>Events for {{ this_month|date:"F Y" }}</h3>
     <ul class="list-unstyled">
-    {% for row in calendar %}
-        {% for day, items in row %}
-            {% for event in items %}
+        {% for event in occurrences %}
             <li>{% if event.all_day %}{{ event.start_time|date:"l, F j" }}{% else %}{{ event.start_time|date:"l, F j, H:i" }}{% endif %}: <a href="{% url 'event-occurrence' event.event.id event.id %}">{{ event.title }}</a>
-                    {% for note in event.notes.all %}
-                        <br>{{ note.note }}
-                    {% endfor %}
-                </li>
-                {% endfor %}
-                {% endfor %}
 
+        {% endfor %}
     </ul>
-    {% endfor %}
     {% else %}
         <p>No events this month</p>
     {% endif %}
