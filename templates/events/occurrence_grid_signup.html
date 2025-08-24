@@ -17,8 +17,8 @@
     <tbody>
       {% for occ in occurrences %}
         <tr>
-          <td>{{ occ.start_time|date:"l, F j, H:i"  }}</td>
-          <td>
+          <td class="align-middle">{{ occ.start_time|date:"l, F j, H:i"  }}</td>
+          <td class="align-middle">
             {% if occ.opener %}
               {{ occ.opener.get_full_name|default:occ.opener.username }}
             {% else %}
@@ -30,7 +30,7 @@
               </form>
             {% endif %}
           </td>
-          <td>
+          <td class="align-middle">
             {% if occ.closer %}
               {{ occ.closer.get_full_name|default:occ.closer.username }}
             {% else %}
