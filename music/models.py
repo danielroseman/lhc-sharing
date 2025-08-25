@@ -50,5 +50,10 @@ class Song(models.Model):
                 )
                 data["preview"] = preview_url
             files.append(data)
-        files.sort(key=lambda x: (x["path"].suffix, x["path"].name))
+
+        def sorter(item):
+            suffix = '.000' if (suffix := item["path"].suffix) == ".pdf" else suffix
+            return (suffix, item["path"].name)
+
+        files.sort(key=sorter)
         return files
