@@ -40,7 +40,11 @@ class Event(models.Model):
         count = rrule_params.get("count")
         until = rrule_params.get("until")
         if not (count or until):
-            self.occurrence_set.create(start_time=start_time, end_time=end_time)
+            self.occurrence_set.create(
+                start_time=start_time,
+                end_time=end_time,
+                location=location
+            )
         else:
             rrule_params.setdefault("freq", rrule.DAILY)
             delta = end_time - start_time

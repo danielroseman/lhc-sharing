@@ -1,3 +1,4 @@
+import copy
 import datetime
 
 from dateutil import rrule
@@ -66,6 +67,10 @@ class RecurringEventForm(forms.ModelForm):
         help_text="The location of the event",
         required=False,
     )
+
+    class Meta:
+        model = Event
+        fields = "__all__"
 
     def clean(self):
         cleaned_data = super().clean()
@@ -162,7 +167,7 @@ class EventAdmin(admin.ModelAdmin):
     )
 
     def get_fieldsets(self, request, obj=None):
-        fieldsets = super().get_fieldsets(request, obj)
+        fieldsets = copy.deepcopy(super().get_fieldsets(request, obj))
         if obj and obj.occurrence_set.exists():
             # If the event already has occurrences, collapse the recurring event fields
             fieldsets[1][1]["classes"] = ["collapse"]

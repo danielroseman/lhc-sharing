@@ -34,6 +34,7 @@ class SongAdmin(DdcuAdminMixin):
 
 admin.site.unregister(FlatPage)
 
+
 @admin.register(FlatPage)
 class MarkdownxFlatPageAdmin(FlatPageAdmin):
     class Media:
