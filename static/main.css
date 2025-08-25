@@ -25,6 +25,13 @@ table.song-table { width: initial }
   overflow: hidden;
   padding: 5px 10px 5px 5px;
   aspect-ratio: 2/3;
+  height: auto;
+}
+
+.month-view thead,
+.month-view tbody,
+.month-view tr {
+  display: contents;
 }
 
 @media (min-width: 576px) {

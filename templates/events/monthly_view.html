@@ -9,29 +9,32 @@
             <a href="{% url 'event-monthly-view' today.year today.month|stringformat:"02d" %}" title="This month" class="fc-today-button btn btn-primary{% if this_month.month == today.month and this_month.year == today.year %} disabled{% endif %}" >today</a>
             <div class="btn-group">
                 <a href="{% url 'event-monthly-view' last_month.year last_month.month|stringformat:"02d" %}" title="Previous month" class="fc-prev-button btn btn-primary">
-                    <span class="bi bi-chevron-left" role="img"></span>
+                    <span class="bi bi-chevron-left" role="presentation"></span>
                 </a>
                 <a href="{% url 'event-monthly-view' next_month.year next_month.month|stringformat:"02d" %}" title="Next month" aria-pressed="false" class="fc-next-button btn btn-primary">
-                    <span class="bi bi-chevron-right" role="img"></span>
+                    <span class="bi bi-chevron-right" role="presentation"></span>
                 </a>
             </div>
         </div>
     </div>
-    <div class="mb-4 month-view{% if this_month.month == today.month and this_month.year == today.year %} current-month{% endif %}" aria-details="events-list">
-          <div class='month-view-header'>Sun</div>
-          <div class='month-view-header'>Mon</div>
-          <div class='month-view-header'>Tue</div>
-          <div class='month-view-header'>Wed</div>
-          <div class='month-view-header'>Thu</div>
-          <div class='month-view-header'>Fri</div>
-          <div class='month-view-header'>Sat</div>
-            {% for row in calendar %}
+    <table class="mb-4 month-view{% if this_month.month == today.month and this_month.year == today.year %} current-month{% endif %}" aria-details="events-list">
+        <thead>
+          <th aria-label="Monday" class='month-view-header'>Mon</th>
+          <th aria-label="Tuesday" class='month-view-header'>Tue</th>
+          <th aria-label="Wednesday" class='month-view-header'>Wed</th>
+          <th aria-label="Thursday" class='month-view-header'>Thu</th>
+          <th aria-label="Friday" class='month-view-header'>Fri</th>
+          <th aria-label="Saturday" class='month-view-header'>Sat</th>
+          <th aria-label="Sunday" class='month-view-header'>Sun</th>
+        </thead>
+        {% for row in calendar %}
+            <tr>
                 {% for day,items in row  %}
-                <div class="day {% if day == today.day %} today{% endif %}">
+                <td class="day {% if day == today.day %} today{% endif %}">
                 {% if day %}
-                <div class="text-end day-ordinal">{{ day }}</div>
+                <div role="presentation" class="text-end day-ordinal">{{ day }}</div>
                     {% if items %}
-                    <ul class="list-unstyled">{% for item in items %}
+                    <ul role="presentation" class="list-unstyled">{% for item in items %}
                         <li class="event-item{% if item.all_day %}-all-day{% endif %}">
                             {% if not item.all_day %}
                             <span class="event-times">{{ item.start_time|time:"H:i" }}</span>
@@ -55,15 +58,16 @@
                     </ul>
                     {% endif %}
                 {% endif %}
-                </div>
+                </td>
                 {% endfor %}
+            </tr>
             {% endfor %}
-        </div>
+        </table>
     </div>
     <div id="events-list">
     {% if occurrences %}
     <h3>Events for {{ this_month|date:"F Y" }}</h3>
-    <ul class="list-unstyled">
+    <ul role="presentation" class="list-unstyled">
         {% for event in occurrences %}
             <li>{% if event.all_day %}{{ event.start_time|date:"l, F j" }}{% else %}{{ event.start_time|date:"l, F j, H:i" }}{% endif %}: <a href="{% url 'event-occurrence' event.event.id event.id %}">{{ event.title }}</a>
 
