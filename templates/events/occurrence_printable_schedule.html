@@ -1,0 +1,172 @@
+{% load event_filters %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Printable Schedule - {{ event.description }}</title>
+    <style>
+        @media print {
+            .no-print {
+                display: none;
+            }
+        }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 30px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+            page-break-inside: avoid;
+        }
+        th, td {
+            border: 2px solid #333;
+            padding: 8px;
+            text-align: left;
+            vertical-align: middle;
+        }
+        th {
+            background-color: #d4e6d4;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        th:first-child {
+            width: 80px;
+        }
+        .month-header {
+            font-weight: bold;
+            font-size: 18px;
+            padding: 10px;
+            border: 2px solid #333;
+        }
+        /* Month color classes */
+        .month-1 {
+            background-color: #e8d7e8; /* Light purple */
+        }
+        .month-2 {
+            background-color: #f5ddc5; /* Light orange/peach */
+        }
+        .month-3 {
+            background-color: #d7e8d7; /* Light green */
+        }
+        .date-column {
+            font-weight: bold;
+            width: 60px;
+            text-align: center;
+        }
+        .icon {
+            margin-right: 5px;
+        }
+        .comments-column {
+            min-width: 200px;
+        }
+        .no-rehearsal {
+            font-style: italic;
+        }
+        .print-button {
+            margin-bottom: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .print-button:hover {
+            background-color: #0056b3;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+    <div class="no-print">
+        <button class="print-button" onclick="window.print()">Print Schedule</button>
+        <a href="{% url 'occurrence_signup_grid' event.id %}" style="margin-left: 10px;">Back to Sign-up</a>
+    </div>
+    
+    <h1>{{ event.description }} - Rehearsal Schedule</h1>
+    
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 80px;">Date</th>
+                <th><span class="icon">🔑</span>Open</th>
+                <th><span class="icon">🔒</span>Close</th>
+                <th><span class="icon">✏️</span>Comments</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for month, entries in grouped_occurrences.items %}
+                {% for entry in entries %}
+                    {% if forloop.first %}
+                    <tr>
+                        <td colspan="4" class="month-header {{ month_classes|get_item:month }}">
+                            {{ month|upper }}
+                        </td>
+                    </tr>
+                    {% endif %}
+                    
+                    {% if entry.type == 'no_rehearsal' %}
+                    <tr>
+                        <td class="date-column {{ month_classes|get_item:month }}">
+                            <strong>{{ entry.display_date|date:"j" }}</strong>
+                        </td>
+                        <td colspan="2" style="text-align: center; background-color: #ffeeee;">
+                            <span style="color: #ff6b6b;">🔶 🔶 🔶 🔶 🔶 🔶</span>
+                        </td>
+                        <td class="comments-column no-rehearsal">
+                            <em>no rehearsal</em>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td class="date-column {{ month_classes|get_item:month }}">
+                            <strong>{{ entry.occurrence.start_time|date:"j" }}</strong>
+                        </td>
+                        <td>
+                            {% if entry.occurrence.opener %}
+                                {{ entry.occurrence.opener.get_full_name|default:entry.occurrence.opener.username }}
+                            {% else %}
+                                &nbsp;
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if entry.occurrence.closer %}
+                                {{ entry.occurrence.closer.get_full_name|default:entry.occurrence.closer.username }}
+                            {% else %}
+                                &nbsp;
+                            {% endif %}
+                        </td>
+                        <td class="comments-column">
+                            {% if entry.occurrence.details %}
+                                {{ entry.occurrence.details }}
+                            {% else %}
+                                &nbsp;
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endif %}
+                {% endfor %}
+            {% empty %}
+                <tr>
+                    <td colspan="4">No upcoming rehearsals scheduled.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    <div style="margin-top: 40px; font-size: 12px; color: #666;">
+        <p>Generated on: {% now "F j, Y at H:i" %}</p>
+    </div>
+</body>
+</html>

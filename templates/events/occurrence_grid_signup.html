@@ -5,6 +5,10 @@
 {% block content %}
   <h2>Rehearsal sign up</h2>
   <h3>{{ event.description }}</h3>
+  
+  <div style="margin-bottom: 20px;">
+    <a href="{% url 'occurrence_printable_schedule' event.id %}" class="btn btn-secondary">View Printable Schedule</a>
+  </div>
 
   <table class="table">
     <thead>

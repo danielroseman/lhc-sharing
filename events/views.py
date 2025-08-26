@@ -78,3 +78,99 @@ def occurrence_grid_signup(request, event_id):
         "events/occurrence_grid_signup.html",
         {"event": event, "occurrences": occurrences},
     )
+
+
+@login_required
+def occurrence_printable_schedule(request, event_id):
+    """
+    Display a printable schedule of occurrences for an event,
+    grouped by month with opener/closer assignments and comments.
+    Includes detection of weeks without rehearsals.
+    """
+    event = Event.objects.get(id=event_id)
+    occurrences = list(
+        event.occurrence_set.filter(start_time__gte=timezone.now()).order_by(
+            "start_time"
+        )
+    )
+
+    if not occurrences:
+        return render(
+            request,
+            "events/occurrence_printable_schedule.html",
+            {"event": event, "grouped_occurrences": {}},
+        )
+
+    # Create a set of all weeks that have rehearsals
+    rehearsal_weeks = set()
+    for occurrence in occurrences:
+        # Get the Monday of the week for this occurrence
+        week_start = occurrence.start_time.date() - timedelta(
+            days=occurrence.start_time.weekday()
+        )
+        rehearsal_weeks.add(week_start)
+
+    # Generate all weeks from first to last occurrence
+    first_date = occurrences[0].start_time.date()
+    last_date = occurrences[-1].start_time.date()
+
+    # Start from the Monday of the first week
+    current_week = first_date - timedelta(days=first_date.weekday())
+    last_week = last_date - timedelta(days=last_date.weekday())
+
+    # Create entries for all weeks, marking those without rehearsals
+    all_entries = []
+
+    for occurrence in occurrences:
+        all_entries.append({
+            "type": "rehearsal",
+            "date": occurrence.start_time,
+            "occurrence": occurrence,
+        })
+
+    # Add "no rehearsal" entries for weeks without rehearsals
+    while current_week <= last_week:
+        if current_week not in rehearsal_weeks:
+            # Use Tuesday of the week (typical rehearsal day) for both sorting and display
+            week_tuesday = current_week + timedelta(days=1)  # Tuesday
+            week_sunday = current_week + timedelta(days=6)  # Sunday (end of week)
+
+            # Use Tuesday for sorting and display (as rehearsals are typically on Tuesdays)
+            sort_date = datetime.combine(week_tuesday, datetime.min.time())
+            sort_date = timezone.make_aware(sort_date, timezone.get_current_timezone())
+
+            all_entries.append({
+                "type": "no_rehearsal",
+                "date": sort_date,  # Used for sorting (Tuesday)
+                "week_start": current_week,  # Monday
+                "week_end": week_sunday,  # Sunday
+                "display_date": week_tuesday,  # Display Tuesday (typical rehearsal day)
+            })
+        current_week += timedelta(weeks=1)
+
+    # Sort all entries by date
+    all_entries.sort(key=lambda x: x["date"])
+
+    # Group all entries by month and assign month indices
+    grouped_occurrences = {}
+    month_classes = {}
+    month_index = 0
+
+    for entry in all_entries:
+        month_key = entry["date"].strftime("%B %Y")
+        if month_key not in grouped_occurrences:
+            grouped_occurrences[month_key] = []
+            # Assign a class index to this month (month-1, month-2, month-3)
+            month_classes[month_key] = f"month-{month_index % 3 + 1}"
+            month_index += 1
+        grouped_occurrences[month_key].append(entry)
+
+    return render(
+        request,
+        "events/occurrence_printable_schedule.html",
+        {
+            "event": event,
+            "grouped_occurrences": grouped_occurrences,
+            "month_classes": month_classes,
+        },
+    )
