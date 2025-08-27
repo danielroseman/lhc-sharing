@@ -151,26 +151,16 @@ def occurrence_printable_schedule(request, event_id):
     # Sort all entries by date
     all_entries.sort(key=lambda x: x["date"])
 
-    # Group all entries by month and assign month indices
-    grouped_occurrences = {}
-    month_classes = {}
-    month_index = 0
-
     for entry in all_entries:
         month_key = entry["date"].strftime("%B %Y")
-        if month_key not in grouped_occurrences:
-            grouped_occurrences[month_key] = []
-            # Assign a class index to this month (month-1, month-2, month-3)
-            month_classes[month_key] = f"month-{month_index % 3 + 1}"
-            month_index += 1
-        grouped_occurrences[month_key].append(entry)
+
+        entry["month"] = month_key
 
     return render(
         request,
         "events/occurrence_printable_schedule.html",
         {
             "event": event,
-            "grouped_occurrences": grouped_occurrences,
-            "month_classes": month_classes,
+            "entries": all_entries,
         },
     )

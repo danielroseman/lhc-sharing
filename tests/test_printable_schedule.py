@@ -60,12 +60,7 @@ def test_missing_week_detection_october_28(client, user, event):
         response = client.get(url)
 
     assert response.status_code == 200
-    grouped = response.context["grouped_occurrences"]
-
-    # Flatten all entries to check for the no-rehearsal week
-    all_entries = []
-    for month_entries in grouped.values():
-        all_entries.extend(month_entries)
+    all_entries = response.context["entries"]
 
     # Find the no-rehearsal entry
     no_rehearsal_entries = [e for e in all_entries if e["type"] == "no_rehearsal"]
@@ -116,12 +111,7 @@ def test_multiple_missing_weeks(client, user, event):
         response = client.get(url)
 
     assert response.status_code == 200
-    grouped = response.context["grouped_occurrences"]
-
-    # Flatten all entries
-    all_entries = []
-    for month_entries in grouped.values():
-        all_entries.extend(month_entries)
+    all_entries = response.context["entries"]
 
     # Find no-rehearsal entries
     no_rehearsal_entries = [e for e in all_entries if e["type"] == "no_rehearsal"]
@@ -178,12 +168,7 @@ def test_consecutive_weeks_no_gap(client, user, event):
         response = client.get(url)
 
     assert response.status_code == 200
-    grouped = response.context["grouped_occurrences"]
-
-    # Flatten all entries
-    all_entries = []
-    for month_entries in grouped.values():
-        all_entries.extend(month_entries)
+    all_entries = response.context["entries"]
 
     # Find no-rehearsal entries
     no_rehearsal_entries = [e for e in all_entries if e["type"] == "no_rehearsal"]

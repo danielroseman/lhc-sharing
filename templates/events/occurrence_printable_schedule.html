@@ -1,4 +1,3 @@
-{% load event_filters %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -83,9 +82,6 @@
         .print-button:hover {
             background-color: #0056b3;
         }
-        tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
     </style>
 </head>
 <body>
@@ -106,31 +102,28 @@
             </tr>
         </thead>
         <tbody>
-            {% for month, entries in grouped_occurrences.items %}
-                {% for entry in entries %}
-                    {% if forloop.first %}
-                    <tr>
-                        <td colspan="4" class="month-header {{ month_classes|get_item:month }}">
-                            {{ month|upper }}
-                        </td>
-                    </tr>
-                    {% endif %}
-                    
+            {% regroup entries by month as month_groups %}
+            {% for month in month_groups %}
+                
+                <tr class=" {% cycle 'month-1' 'month-2' 'month-3' as month_class %}">
+                    <td colspan="4" class="month-header">
+                        {{ month.grouper|upper }}
+                    </td>
+                </tr>
+                {% for entry in month.list %}
+                <tr class="{{ month_class }}">
                     {% if entry.type == 'no_rehearsal' %}
-                    <tr>
-                        <td class="date-column {{ month_classes|get_item:month }}">
+                        <td class="date-column">
                             <strong>{{ entry.display_date|date:"j" }}</strong>
                         </td>
-                        <td colspan="2" style="text-align: center; background-color: #ffeeee;">
+                        <td colspan="2" style="text-align: center;">
                             <span style="color: #ff6b6b;">🔶 🔶 🔶 🔶 🔶 🔶</span>
                         </td>
                         <td class="comments-column no-rehearsal">
                             <em>no rehearsal</em>
                         </td>
-                    </tr>
                     {% else %}
-                    <tr>
-                        <td class="date-column {{ month_classes|get_item:month }}">
+                        <td class="date-column">
                             <strong>{{ entry.occurrence.start_time|date:"j" }}</strong>
                         </td>
                         <td>
@@ -154,8 +147,8 @@
                                 &nbsp;
                             {% endif %}
                         </td>
-                    </tr>
                     {% endif %}
+                    </tr>
                 {% endfor %}
             {% empty %}
                 <tr>
