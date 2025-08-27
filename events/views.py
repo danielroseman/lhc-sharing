@@ -78,3 +78,16 @@ def occurrence_grid_signup(request, event_id):
         "events/occurrence_grid_signup.html",
         {"event": event, "occurrences": occurrences},
     )
+
+
+@login_required
+def occurrence_printable_schedule(request, event_id):
+    event = Event.objects.get(id=event_id)
+    occurrences = event.occurrence_set.filter(
+        start_time__gte=timezone.now()
+    ).order_by("start_time")
+    return render(
+        request,
+        "events/occurrence_printable_schedule.html",
+        {"event": event, "occurrences": occurrences},
+    )
