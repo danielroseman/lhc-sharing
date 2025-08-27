@@ -60,5 +60,6 @@ urlpatterns = [
         events_views.occurrence_printable_schedule,
         name="occurrence_printable_schedule",
     ),
+    path("events/feed.ics", events_views.EventFeed()),
     path("", include("django.contrib.flatpages.urls")),
 ]
