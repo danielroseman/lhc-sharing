@@ -209,6 +209,20 @@ wheels = [
 ]
 
 [[package]]
+name = "django-ical"
+version = "1.9.2"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "django" },
+    { name = "django-recurrence" },
+    { name = "icalendar" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/e1/dc/70971de377f77c4f9f789a38b049b5fa239f1cfc6b671b0503971960f245/django-ical-1.9.2.tar.gz", hash = "sha256:44c9b6fa90d09f25e9ebaa91ed9eb007f079afbc23d6aac909cfc18188a8e90c", size = 30831, upload-time = "2023-06-12T15:22:54.015Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/05/3f/647857462fa4169cb855aaf14969a6843f3910a3781d7c17f18c460b0e08/django_ical-1.9.2-py3-none-any.whl", hash = "sha256:74a16bca05735f91a00120cad7250f3c3aa292a9f698a6cfdc544a922c11de70", size = 15494, upload-time = "2023-06-12T15:22:37.618Z" },
+]
+
+[[package]]
 name = "django-invitations"
 version = "2.1.0"
 source = { registry = "https://pypi.org/simple" }
@@ -218,6 +232,19 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/bd/fe/b4d8a441d2cf9ea6c8e6babae3fe0726567b9696ec521f6753b39ad47587/django_invitations-2.1.0.tar.gz", hash = "sha256:88df42bfc20aa846116c5216d81ce916c303303c0249a74f1b1867e260e6814c", size = 27976, upload-time = "2023-11-22T20:51:04.395Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/a9/4b/df5573059df97434a413a756757e0a1baeaa0562590f21575a8f83c843af/django_invitations-2.1.0-py3-none-any.whl", hash = "sha256:321d4430f06927be146f82c15ba153872d75185e7accd387bfe1773c1130d30f", size = 42789, upload-time = "2023-11-22T20:50:37.929Z" },
+]
+
+[[package]]
+name = "django-recurrence"
+version = "1.11.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "django" },
+    { name = "python-dateutil" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/d1/c7/e8d8539d8ccb3ee6498206b6ecef6cd551c3a281e28ae16812b9bc868da3/django-recurrence-1.11.1.tar.gz", hash = "sha256:9c89444e651a78c587f352c5f63eda48ab2f53996347b9fcdff2d248f4fcff70", size = 133440, upload-time = "2022-01-25T10:14:06.734Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/3d/0a/5dc0f1f408a5b5f00c64ec57f3868248ed65ee660980118867b1279eca96/django_recurrence-1.11.1-py3-none-any.whl", hash = "sha256:0c65f30872599b5813a9bab6952dada23c55894f28674490a753ada559f14bc5", size = 127256, upload-time = "2022-01-25T10:14:05.319Z" },
 ]
 
 [[package]]
@@ -431,6 +458,19 @@ wheels = [
 ]
 
 [[package]]
+name = "icalendar"
+version = "6.3.2"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "python-dateutil" },
+    { name = "tzdata" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/5d/70/458092b3e7c15783423fe64d07e63ea3311a597e723be6a1060513e3db93/icalendar-6.3.2.tar.gz", hash = "sha256:e0c10ecbfcebe958d33af7d491f6e6b7580d11d475f2eeb29532d0424f9110a1", size = 178422, upload-time = "2025-11-05T12:49:32.286Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/06/ee/2ff96bb5bd88fe03ab90aedf5180f96dc0f3ae4648ca264b473055bcaaff/icalendar-6.3.2-py3-none-any.whl", hash = "sha256:d400e9c9bb8c025e5a3c77c236941bb690494be52528a0b43cc7e8b7c9505064", size = 242403, upload-time = "2025-11-05T12:49:30.691Z" },
+]
+
+[[package]]
 name = "idna"
 version = "3.10"
 source = { registry = "https://pypi.org/simple" }
@@ -535,6 +575,7 @@ dependencies = [
     { name = "django-direct-cloud-upload" },
     { name = "django-environ" },
     { name = "django-gmailapi-backend" },
+    { name = "django-ical" },
     { name = "django-invitations" },
     { name = "mailchimp-marketing" },
     { name = "markdown" },
@@ -563,6 +604,7 @@ requires-dist = [
     { name = "django-direct-cloud-upload", git = "https://github.com/danielroseman/django-direct-cloud-upload" },
     { name = "django-environ" },
     { name = "django-gmailapi-backend" },
+    { name = "django-ical", specifier = ">=1.9.2" },
     { name = "django-invitations" },
     { name = "mailchimp-marketing" },
     { name = "markdown" },

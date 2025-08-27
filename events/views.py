@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from django.utils import timezone
+from django_ical.views import ICalFeed
 
 from events.models import Event, Occurrence
 
@@ -97,3 +98,32 @@ def occurrence_printable_schedule(request, event_id):
         "events/occurrence_printable_schedule.html",
         {"event": event, "occurrences": occurrences},
     )
+
+
+class EventFeed(ICalFeed):
+    """
+    A simple event calender
+    """
+    product_id = '-//LHC Members//Events//EN'
+    timezone = 'UTC'
+    title = "London Humanist Choir Events"
+    # file_name = "event.ics"
+
+    def items(self):
+        return Occurrence.objects.all().order_by('-start_time').select_related()
+
+    def item_title(self, item):
+        return item.event.title
+
+    def item_description(self, item):
+        all_details = "\n\n".join(filter(None, [item.event.details, item.details]))
+        return all_details.replace('**', '')  # Remove markdown bold for iCal
+
+    def item_end_datetime(self, item):
+        return item.end_time
+
+    def item_start_datetime(self, item):
+        return item.start_time
+
+    def item_location(self, item):
+        return item.location

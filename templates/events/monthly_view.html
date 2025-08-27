@@ -18,7 +18,7 @@
             </div>
         </div>
     </div>
-    <table class="mb-4 month-view{% if this_month.month == today.month and this_month.year == today.year %} current-month{% endif %}" aria-details="events-list">
+    <table class="month-view{% if this_month.month == today.month and this_month.year == today.year %} current-month{% endif %}" aria-details="events-list">
         <thead>
           <th aria-label="Monday" class='month-view-header'>Mon</th>
           <th aria-label="Tuesday" class='month-view-header'>Tue</th>
@@ -64,6 +64,7 @@
             </tr>
             {% endfor %}
         </table>
+        <div class="text-end small mb-4"><i class="bi bi-calendar-event p-1"></i><a href="webcal://{{ request.get_host }}{% url "event-feed" %}">Subscribe to this calendar</a></div>
     </section>
     <section aria-label="Events detail" id="events-list">
     {% if occurrences %}

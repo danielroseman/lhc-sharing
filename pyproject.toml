@@ -12,6 +12,7 @@ dependencies = [
     "django-direct-cloud-upload",
     "django-environ",
     "django-gmailapi-backend",
+    "django-ical>=1.9.2",
     "django-invitations",
     "mailchimp-marketing",
     "markdown",
