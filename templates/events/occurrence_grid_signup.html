@@ -18,6 +18,9 @@
       {% for occ in occurrences %}
         <tr>
           <td class="align-middle">{{ occ.start_time|date:"l, F j, H:i"  }}</td>
+          {% if occ.is_break %}
+          <td class="align-middle" colspan="2"><strong>{{ occ.details|default:"Break" }}</strong></td>
+          {% else %}
           <td class="align-middle">
             {% if occ.opener %}
               {{ occ.opener.get_full_name|default:occ.opener.username }}
@@ -42,6 +45,7 @@
               </form>
             {% endif %}
           </td>
+          {% endif %}
         </tr>
       {% empty %}
         <tr><td colspan="3">No upcoming rehearsals found.</td></tr>

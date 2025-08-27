@@ -127,7 +127,7 @@ class OccurrenceInline(admin.StackedInline):
             {
                 "fields": (
                     "start_time", "end_time", "all_day",
-                    "location", "details",
+                    "location", "details", "is_break",
                 ),
                 "classes": ["grid-layout"],
             },

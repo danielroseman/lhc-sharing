@@ -18,7 +18,7 @@ def month_view_notes(request, year, month):
 
     # TODO Whether to include those occurrences that started in the previous
     # month but end in this month?
-    queryset = Occurrence.objects.select_related()
+    queryset = Occurrence.objects.exclude(is_break=True).select_related()
     occurrences = queryset.filter(start_time__year=year, start_time__month=month)
     current_timezone = timezone.get_current_timezone()
 

@@ -1,5 +1,6 @@
 from dateutil import rrule
 from django.db import models
+from django.urls import reverse
 
 
 # TODO: replace with hard-coded choice field?
@@ -82,12 +83,16 @@ class Occurrence(models.Model):
         blank=True,
         related_name="closer_occurrences",
     )
+    is_break = models.BooleanField(default=False)
 
     class Meta:
         ordering = ["start_time"]
 
     def __str__(self):
         return f"{self.event.title} on {self.start_time.strftime('%Y-%m-%d %H:%M')}"
+
+    def get_absolute_url(self):
+        return reverse("event-occurrence", args=[self.event.id, self.id])
 
     @property
     def title(self):
