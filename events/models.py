@@ -1,6 +1,7 @@
 from dateutil import rrule
 from django.db import models
 from django.urls import reverse
+from django.utils.functional import cached_property
 
 
 # TODO: replace with hard-coded choice field?
@@ -19,6 +20,20 @@ class Event(models.Model):
 
     def __str__(self):
         return self.title
+
+    @cached_property
+    def date_range(self):
+        return self.occurrence_set.aggregate(
+            start=models.Min("start_time"), end=models.Max("start_time")
+        )
+
+    @property
+    def full_description(self):
+        return self.description or " ".join([
+            self.date_range["start"].strftime("%b"),
+            "-",
+            self.date_range["end"].strftime("%b %Y"),
+        ])
 
     def add_occurrences(self, start_time, end_time, location, **rrule_params):
         """
@@ -42,9 +57,7 @@ class Event(models.Model):
         until = rrule_params.get("until")
         if not (count or until):
             self.occurrence_set.create(
-                start_time=start_time,
-                end_time=end_time,
-                location=location
+                start_time=start_time, end_time=end_time, location=location
             )
         else:
             rrule_params.setdefault("freq", rrule.DAILY)
