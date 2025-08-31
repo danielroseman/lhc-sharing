@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h2>Attendance</h2>
+    <h3>{{ occurrence.event.title }}: {{ occurrence.start_time|date:"l, F j" }}</h3>
+
+    <p>Attendance for {{ user.get_full_name|default:user.username }} has been recorded.</p>
+    <p><a href="{% url 'event-monthly-view' occurrence.start_time.year occurrence.start_time.month %}">Back to calendar</a></p>
+{% endblock %}
+

@@ -60,5 +60,13 @@ urlpatterns = [
         events_views.occurrence_printable_schedule,
         name="occurrence_printable_schedule",
     ),
+    path(
+        "events/mark-attendance/", events_views.mark_attendance, name="mark_attendance"
+    ),
+    path(
+        "events/mark-attendance-success/",
+        events_views.mark_attendance_success,
+        name="mark_attendance_success",
+    ),
     path("", include("django.contrib.flatpages.urls")),
 ]

@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h2>Mark Attendance</h2>
+    <h3>{{ occurrence.event.title }}: {{ occurrence.start_time|date:"l, F j" }}</h3>
+
+    {% if already_attended %}
+        <div class="alert alert-info" role="alert">
+            You have already marked your attendance for this event.
+        </div>
+    {% else %}
+    <form method="post">
+        {% csrf_token %}
+        <input type="hidden" name="occurrence_id" value="{{ occurrence.id }}">
+        <button type="submit" class="btn btn-primary">Save Attendance</button>
+    </form>
+    {% endif %}
+    <p><a href="{% url 'event-monthly-view' occurrence.start_time.year occurrence.start_time.month %}">Back to calendar</a></p>
+{% endblock %}

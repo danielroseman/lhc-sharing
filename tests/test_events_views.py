@@ -224,3 +224,66 @@ def test_occurrence_grid_signup_requires_login(client, event, future_occurrences
     response = client.get(url)
     assert response.status_code == 302
     assert "/accounts/login/" in response.url
+
+
+def test_mark_attendance_post_marks_user(client_logged_in, user, event, event_type):
+    occ = Occurrence.objects.create(
+        event=event, start_time="2025-09-01T10:00:00Z", end_time="2025-09-01T12:00:00Z"
+    )
+    url = reverse("mark_attendance")
+    response = client_logged_in.post(url, {"occurrence_id": occ.id})
+    occ.refresh_from_db()
+    assert response.status_code == 302
+    assert occ.attendees.filter(id=user.id).exists()
+
+
+def test_mark_attendance_post_invalid_occurrence(client_logged_in, user):
+    url = reverse("mark_attendance")
+    response = client_logged_in.post(url, {"occurrence_id": 99999})
+    assert response.status_code == 302
+
+
+def test_mark_attendance_get_today_and_future_occurrence(client_logged_in, user):
+    rehearsal_type = EventType.objects.create(label="Rehearsal")
+    other_type = EventType.objects.create(label="Other")
+    event = Event.objects.create(title="Rehearsal Event", event_type=rehearsal_type)
+    other_event = Event.objects.create(title="Other Event", event_type=other_type)
+
+    today = timezone.now().replace(hour=10, minute=0, second=0, microsecond=0)
+    future = today + timezone.timedelta(days=1)
+
+    # Occurrence for today with correct type
+    occ_today = Occurrence.objects.create(
+        event=event,
+        start_time=today,
+        end_time=today + timezone.timedelta(hours=2)
+    )
+    # Occurrence for today with wrong type
+    Occurrence.objects.create(
+        event=other_event,
+        start_time=today,
+        end_time=today + timezone.timedelta(hours=2)
+    )
+    # Future occurrence with correct type
+    occ_future = Occurrence.objects.create(
+        event=event,
+        start_time=future,
+        end_time=future + timezone.timedelta(hours=2)
+    )
+
+    url = reverse("mark_attendance")
+    response = client_logged_in.get(url)
+    assert response.status_code == 200
+    # Should show today's occurrence
+    assert response.context["occurrence"].id == occ_today.id
+
+    # Remove today's occurrence, should show future occurrence
+    occ_today.delete()
+    response = client_logged_in.get(url)
+    assert response.status_code == 200
+    assert response.context["occurrence"].id == occ_future.id
+
+    # Mark user as attended, should set already_attended True
+    occ_future.attendees.add(user)
+    response = client_logged_in.get(url)
+    assert response.context['already_attended'] is True
