@@ -1,0 +1,106 @@
+{% extends "admin/base_site.html" %}
+{% load admin_urls %}
+
+{% block breadcrumbs %}
+    <div class="breadcrumbs">
+        <a href="{% url 'admin:index' %}">Home</a>
+        &rsaquo; <a href="{% url 'admin:app_list' app_label=opts.app_label %}">{{ opts.app_config.verbose_name }}</a>
+        &rsaquo; <a href="{% url opts|admin_urlname:'changelist' %}">{{ opts.verbose_name_plural|capfirst }}</a>
+        &rsaquo; Attendance Register
+    </div>
+{% endblock %}
+{% block content %}
+<h2>{{ event.title }} - {{ event.description }}</h2>
+
+<div id="content-main">
+    <ul class="object-tools">
+        <li>
+        <a class="addink" id="export-modal-btn" href="">Export to Google Sheets</a>
+        </li>
+    </ul>
+  <div class="results">
+    <table class="register">
+        <thead>
+            <tr>
+                <th>Attendee</th>
+                {% for occ in occurrences %}
+                <th>
+                    {% if occ.is_break %}
+                        <strong>{{ occ.details|default:"Break" }}</strong>
+                    {% else %}
+                        {{ occ.start_time|date:"Y-m-d" }}
+                    {% endif %}
+                </th>
+                {% endfor %}
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for attendee, attendances, count in attendance %}
+                <tr>
+                    <td>{{ attendee }}</td>
+                    {% for att in attendances %}
+                        <td>
+                            {% if att %}
+                                ✓
+                            {% else %}
+                                -
+                            {% endif %}
+                        </td>
+                    {% endfor %}
+                    <td>{{ count }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <td>Total</td>
+                {% for count in counts %}
+                    <td>{{ count }}</td>
+                {% endfor %}
+            </tr>
+            <tr>
+                <td></td>
+                {% for occ in occurrences %}
+                    <td><a href="{% url 'admin:events_occurrence_change' occ.id %}?register=1">Manage</a></td>
+                {% endfor %}
+            </tr>
+        </tfoot>
+    </table>
+  </div>
+<p><a href="{% url 'admin:events_event_changelist' %}">Back to Events</a></p>
+</div>
+
+<div id="export-modal" style="display:none;">
+  <div class="modal-body">
+    <div class="modal-header">
+      <span>Export Attendance Register</span>
+      <span id="close-modal">&times;</span>
+    </div>
+    <form method="post" action="{% url 'admin:event_attendance_register_export' event_id=event.id %}" id="export-form" class="modal-content">
+      {% csrf_token %}
+      <label for="sheet_id">Google Sheet ID:</label>
+      <input type="text" name="sheet_id" id="sheet_id" required value={{ request.session.sheet_id|default:"" }}>
+      <p class="help">Warning: any existing sheet named "{{ event.description }}" will be replaced.</p>
+      <div class="submit-row">
+          <input type="submit" class="button" type="submit" value="Export">
+      </div>
+    </form>
+  </div>
+</div>
+<script>
+document.getElementById('export-modal-btn').onclick = function(e) {
+  e.preventDefault();
+  document.getElementById('export-modal').style.display = 'block';
+};
+document.getElementById('close-modal').onclick = function() {
+  document.getElementById('export-modal').style.display = 'none';
+};
+window.onclick = function(event) {
+  var modal = document.getElementById('export-modal');
+  if (event.target == modal) {
+    modal.style.display = 'none';
+  }
+};
+</script>
+{% endblock %}

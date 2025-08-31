@@ -1,0 +1,65 @@
+.field-details .vLargeTextField {
+    width: 36em !important;
+}
+td.field-location .vTextField {
+    width: 10em;
+}
+.flex-container.field-closer {
+    margin-left: 40px;
+}
+fieldset.grid-layout {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);  /* 3 equal columns */
+    column-gap: 40px;
+}
+
+fieldset.grid-layout .form-row {
+    display: contents;
+}
+.inline-related.dynamic-occurrence_set {
+    border-bottom: 1px solid #ddd;
+}
+
+.results {
+    overflow-x: scroll;
+    width: 100%;
+}
+table.register {
+    margin-bottom:20px;
+    width: 100%
+}
+#export-modal {
+  position:fixed;
+  top:0;
+  left:0;
+  width:100vw;
+  height:100vh;
+  background:rgba(0,0,0,0.5);
+}
+#export-modal .modal-body {
+  background:#fff;
+  padding:0;
+  margin:10vh auto;
+  width:350px;
+  position:relative;
+  border-radius:8px;
+  overflow:hidden;
+}
+.modal-header {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  background:var(--header-bg);
+  color:#fff;
+  padding:0.5em 1.5em;
+  font-weight:bold;
+  font-size:1.1em;
+}
+.modal-content {
+  padding:1em 1.5em;
+}
+#close-modal {
+  cursor:pointer;
+  color:#fff;
+  font-size:1.5em;
+}

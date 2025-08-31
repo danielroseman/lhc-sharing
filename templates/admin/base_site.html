@@ -4,27 +4,5 @@
 
 {% block extrahead %}
     <link rel="shortcut icon" href="{% static "favicon-16x16.png" %}" type="image/x-icon">
-    <style>
-        .field-details .vLargeTextField {
-            width: 36em !important;
-        }
-        td.field-location .vTextField {
-            width: 10em;
-        }
-        .flex-container.field-closer {
-            margin-left: 40px;
-        }
-        fieldset.grid-layout {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);  /* 3 equal columns */
-            column-gap: 40px;
-        }
-
-        fieldset.grid-layout .form-row {
-            display: contents;
-        }
-        .inline-related.dynamic-occurrence_set {
-            border-bottom: 1px solid #ddd;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="{% static "admin.css" %}">
 {% endblock %}

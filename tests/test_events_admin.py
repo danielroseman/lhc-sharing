@@ -4,6 +4,7 @@ from unittest import mock
 import pytest
 from django.contrib.admin.sites import AdminSite
 from django.contrib.auth.models import User
+from django.urls import reverse
 from django.utils import timezone
 
 from events.admin import EventAdmin, RecurringEventForm
@@ -275,3 +276,40 @@ class TestEventAdmin:
 
             # Verify add_occurrences was not called
             mock_add.assert_not_called()
+
+    def test_attendance_register_admin_view(
+        self,
+        client,
+        admin_site,
+        event,
+        event_type,
+        user,
+    ):
+        # Create two occurrences and two attendees
+        occ1 = Occurrence.objects.create(
+            event=event,
+            start_time="2025-09-01T10:00:00Z",
+            end_time="2025-09-01T12:00:00Z",
+        )
+        occ2 = Occurrence.objects.create(
+            event=event,
+            start_time="2025-09-02T10:00:00Z",
+            end_time="2025-09-02T12:00:00Z",
+        )
+        user2 = type(user).objects.create_user(username="otheruser", password="pass")
+        occ1.attendees.add(user)
+        occ2.attendees.add(user2)
+
+        client.force_login(user)
+        url = reverse("admin:event_attendance_register", args=[event.id])
+        response = client.get(url)
+        assert response.status_code == 200
+        # Check both users and both dates are present
+        assert user.get_full_name() in response.content.decode()
+        assert user2.get_full_name() in response.content.decode()
+        assert "2025-09-01" in response.content.decode()
+        assert "2025-09-02" in response.content.decode()
+        assert user.get_full_name() in response.content.decode()
+        assert user2.get_full_name() in response.content.decode()
+        assert "2025-09-01" in response.content.decode()
+        assert "2025-09-02" in response.content.decode()
