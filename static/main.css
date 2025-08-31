@@ -58,3 +58,9 @@ table.song-table { width: initial }
   border-radius: 5px;
   padding: 2px;
 }
+@media (max-width: 575.98px) {
+  .navbar-brand img {
+    width: 180px;
+    height: auto;
+  }
+}

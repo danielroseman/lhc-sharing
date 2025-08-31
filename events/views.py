@@ -18,7 +18,9 @@ def month_view_notes(request, year, month):
 
     # TODO Whether to include those occurrences that started in the previous
     # month but end in this month?
-    queryset = Occurrence.objects.exclude(is_break=True).select_related()
+    queryset = Occurrence.objects.exclude(is_break=True).select_related(
+        "opener", "closer", "event"
+    )
     occurrences = queryset.filter(start_time__year=year, start_time__month=month)
     current_timezone = timezone.get_current_timezone()
 
@@ -72,7 +74,9 @@ def occurrence_grid_signup(request, event_id):
         return redirect("occurrence_signup_grid", event_id=event_id)
 
     event = Event.objects.get(id=event_id)
-    occurrences = event.occurrence_set.filter(start_time__gte=timezone.now())
+    occurrences = event.occurrence_set.filter(
+        start_time__gte=timezone.now()
+    ).select_related("opener", "closer")
     return render(
         request,
         "events/occurrence_grid_signup.html",
@@ -83,9 +87,11 @@ def occurrence_grid_signup(request, event_id):
 @login_required
 def occurrence_printable_schedule(request, event_id):
     event = Event.objects.get(id=event_id)
-    occurrences = event.occurrence_set.filter(
-        start_time__gte=timezone.now()
-    ).order_by("start_time")
+    occurrences = (
+        event.occurrence_set.filter(start_time__gte=timezone.now())
+        .order_by("start_time")
+        .select_related("opener", "closer")
+    )
     return render(
         request,
         "events/occurrence_printable_schedule.html",

@@ -100,7 +100,7 @@
             </tr>
         </thead>
         <tbody>
-            {% regroup event.occurrence_set.all by start_time|date:"F Y" as month_groups %}
+            {% regroup occurrences by start_time|date:"F Y" as month_groups %}
             {% for month in month_groups %}
                 
                 <tr class=" {% cycle 'month-1' 'month-2' 'month-3' as month_class %}">
@@ -118,7 +118,7 @@
                             <span style="color: #ff6b6b;">🔶 🔶 🔶 🔶 🔶 🔶</span>
                         </td>
                         <td class="comments-column no-rehearsal">
-                            <em>{{ occurrence.details|default:"no rehearsal" }}</em>
+                            <em>No rehearsal - {{ occurrence.details|default:"break" }}</em>
                         </td>
                     {% else %}
                         <td class="date-column">
