@@ -97,6 +97,9 @@ class Occurrence(models.Model):
         related_name="closer_occurrences",
     )
     is_break = models.BooleanField(default=False)
+    attendees = models.ManyToManyField(
+        "auth.User", related_name="attended_occurrences", blank=True
+    )
 
     class Meta:
         ordering = ["start_time"]
