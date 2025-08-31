@@ -4,6 +4,8 @@ from django.contrib import admin
 from django.contrib.flatpages.admin import FlatPageAdmin
 from django.contrib.flatpages.models import FlatPage
 
+from invitations.admin import InvitationAdmin
+from invitations.models import Invitation
 from music.models import DDCU_BUCKET_IDENTIFIER, Song
 
 
@@ -33,6 +35,7 @@ class SongAdmin(DdcuAdminMixin):
 
 
 admin.site.unregister(FlatPage)
+admin.site.unregister(Invitation)
 
 
 @admin.register(FlatPage)
@@ -41,4 +44,19 @@ class MarkdownxFlatPageAdmin(FlatPageAdmin):
         css = {"all": ("https://unpkg.com/tiny-markdown-editor/dist/tiny-mde.min.css",)}
         js = (
             "https://unpkg.com/tiny-markdown-editor/dist/tiny-mde.min.js",
+        )
+
+
+@admin.register(Invitation)
+class ResendInvitationAdmin(InvitationAdmin):
+    actions = ["resend_invitation"]
+
+    @admin.action(description="Resend invitation")
+    def resend_invitation(self, request, queryset):
+        for invitation in queryset:
+            invitation.send_invitation(request)
+        num = queryset.count()
+        self.message_user(
+            request,
+            f"{num} invitation{'' if num == 1 else 's'} have been resent."
         )
