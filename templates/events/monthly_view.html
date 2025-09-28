@@ -49,7 +49,7 @@
                                 data-bs-container=".month-view"
                                 data-bs-trigger="hover focus"
                                 data-bs-title="{{ item.title }}"
-                                data-bs-content="{{ item.all_details|markdown }}">{{ item.title }}
+                                data-raw-content="{{ item.all_details }}">{{ item.title }}
                             </a>
                             {% else %}
                             {{ item.title }}
@@ -80,8 +80,12 @@
     </section>
 {% endblock %}
 {% block extrascript %}
+<script src="https://cdn.jsdelivr.net/npm/marked/lib/marked.umd.js"></script>
 <script>
     const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
-    const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl))
+    const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl, { content: () => {
+        const rawContent = popoverTriggerEl.getAttribute('data-raw-content');
+        return marked.parse(rawContent);
+    }}))
 </script>
 {% endblock %}

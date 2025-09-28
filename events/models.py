@@ -117,7 +117,8 @@ class Occurrence(models.Model):
 
     @property
     def all_details(self):
-        details = [self.event.details, self.location, self.details]
+        full_location = f"**Location**: {self.location}" if self.location else ""
+        details = [self.event.details, full_location, self.details]
         open_close = []
         if self.opener:
             open_close.append(f"Open: {self.opener.first_name} {self.opener.last_name}")
