@@ -1,4 +1,4 @@
--r requirements.txt
+#-r requirements.txt
 
 django-stubs==4.2.7
 mypy==1.9.0
