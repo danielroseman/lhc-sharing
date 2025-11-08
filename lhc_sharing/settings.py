@@ -15,11 +15,11 @@ import os
 from pathlib import Path
 
 import environ
+import sentry_sdk
 from google.oauth2 import service_account
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 env = environ.Env(DEBUG=(bool, False))
 env_file = BASE_DIR / ".env"
@@ -203,3 +203,8 @@ LOGGING = {
 }
 
 SITE_ID = 1
+
+sentry_sdk.init(
+    dsn=env("SENTRY_DSN"),
+    send_default_pii=True,
+)

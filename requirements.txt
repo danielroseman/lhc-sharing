@@ -10,3 +10,4 @@ django-gmailapi-backend==0.3.2
 git+https://github.com/danielroseman/django-direct-cloud-upload
 Markdown==3.7
 mailchimp-marketing==3.0.80
+sentry-sdk[django]==2.43.0
