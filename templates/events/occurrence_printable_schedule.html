@@ -36,8 +36,19 @@
             font-weight: bold;
             font-size: 16px;
         }
-        th:first-child {
-            width: 80px;
+        @media (min-width: 576px) {
+             th.date::before {
+                content: "🗓️ ";
+            }
+        }
+        th.open::before {
+            content: "🔑 ";
+        }
+        th.close::before {
+            content: "🔒 ";
+        }
+        th.comments::before {
+            content: "✏️ ";
         }
         .month-header {
             font-weight: bold;
@@ -62,24 +73,19 @@
         .icon {
             margin-right: 5px;
         }
-        .comments-column {
-            min-width: 200px;
+        .break {
+            background-image: url("data:image/svg+xml;utf8,\ <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'>\ <rect x='25' y='25' width='50' height='50' fill='%23f39c12' transform='rotate(45 50 50)'/>\ </svg>");
+            background-size: 1.8em;
+            background-repeat: space;
+            background-position: left;
         }
-        .no-rehearsal {
+        .break-comments {
             font-style: italic;
         }
-        .print-button {
-            margin-bottom: 20px;
-            padding: 10px 20px;
-            font-size: 16px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .print-button:hover {
-            background-color: #0056b3;
+        .generated-on {
+            font-size: 12px;
+            color: #666;
+            margin-top: 40px;
         }
     </style>
 </head>
@@ -93,10 +99,10 @@
     <table>
         <thead>
             <tr>
-                <th>Date</th>
-                <th><span class="icon">🔑</span>Open</th>
-                <th><span class="icon">🔒</span>Close</th>
-                <th><span class="icon">✏️</span>Comments</th>
+                <th class="date">Date</th>
+                <th class="open">Open</th>
+                <th class="close">Close</th>
+                <th class="comments">Comments</th>
             </tr>
         </thead>
         <tbody>
@@ -114,11 +120,9 @@
                         <td class="date-column">
                             <strong>{{ occurrence.start_time|date:"j" }}</strong>
                         </td>
-                        <td colspan="2" style="text-align: center;">
-                            <span style="color: #ff6b6b;">🔶 🔶 🔶 🔶 🔶 🔶</span>
-                        </td>
-                        <td class="comments-column no-rehearsal">
-                            <em>No rehearsal - {{ occurrence.details|default:"break" }}</em>
+                        <td colspan="2" class="break"></td>
+                        <td class="break-comments">
+                            No rehearsal - {{ occurrence.details|default:"break" }}
                         </td>
                     {% else %}
                         <td class="date-column">
@@ -156,8 +160,8 @@
         </tbody>
     </table>
     
-    <div style="margin-top: 40px; font-size: 12px; color: #666;">
-        <p>Generated on: {% now "F j, Y at H:i" %}</p>
+    <div class="generated-on">
+        <p>Generated on: {% now "F j, Y" %} at {% now "H:i" %}</p>
     </div>
 </body>
 </html>
