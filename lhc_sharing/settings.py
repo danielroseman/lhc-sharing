@@ -32,7 +32,12 @@ SECRET_KEY = env("SECRET_KEY")
 
 DEBUG = env("DEBUG")
 
-ALLOWED_HOSTS = ["localhost", ".vercel.app", "members-london.humanistchoir.org"]
+ALLOWED_HOSTS = [
+    "localhost",
+    ".vercel.app",
+    ".onrender.com",
+    "members-london.humanistchoir.org",
+]
 
 # Application definition
 
