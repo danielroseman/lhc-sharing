@@ -13,6 +13,7 @@ dependencies = [
     "django-environ",
     "django-gmailapi-backend",
     "django-invitations",
+    "gunicorn>=23.0.0",
     "mailchimp-marketing",
     "markdown",
     "psycopg2-binary",
