@@ -64,7 +64,12 @@
             </tr>
             {% endfor %}
         </table>
-        <div class="text-end small mb-4"><i class="bi bi-calendar-event p-1"></i><a href="webcal://{{ request.get_host }}{% url "event-feed" %}">Subscribe to this calendar</a></div>
+        <div class="text-end small mb-4">
+            <i class="bi bi-calendar-event p-1"></i>
+            {% if 'Android' in request.META.HTTP_USER_AGENT %}<a href="https://calendar.google.com/calendar/u/0/r?cid=https://{{ request.get_host }}{% url "event-feed" %}">Add to Google Calendar</a>
+            {% else %}<a href="webcal://{{ request.get_host }}{% url "event-feed" %}">Subscribe to this calendar</a>
+            {% endif %}
+        </div>
     </section>
     <section aria-label="Events detail" id="events-list">
     {% if occurrences %}
