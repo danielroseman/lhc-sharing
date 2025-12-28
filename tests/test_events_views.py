@@ -224,3 +224,52 @@ def test_occurrence_grid_signup_requires_login(client, event, future_occurrences
     response = client.get(url)
     assert response.status_code == 302
     assert "/accounts/login/" in response.url
+
+
+def test_occurrence_grid_signup_post_opener_cancel(
+    client_logged_in, event, future_occurrences, user
+):
+    occ = future_occurrences[0]
+    occ.opener = user
+    occ.save()
+
+    url = reverse("occurrence_signup_grid", args=[event.id])
+    response = client_logged_in.post(url, {"occurrence_id": occ.id, "role": "opener"})
+
+    occ.refresh_from_db()
+    assert occ.opener is None
+    assert response.status_code == 302
+
+
+def test_occurrence_grid_signup_post_closer_cancel(
+    client_logged_in, event, future_occurrences, user
+):
+    occ = future_occurrences[1]
+    occ.closer = user
+    occ.save()
+
+    url = reverse("occurrence_signup_grid", args=[event.id])
+    response = client_logged_in.post(url, {"occurrence_id": occ.id, "role": "closer"})
+
+    occ.refresh_from_db()
+    assert occ.closer is None
+    assert response.status_code == 302
+
+
+def test_occurrence_grid_signup_template_shows_cancel_button(
+    client_logged_in,
+    event,
+    future_occurrences,
+    user,
+):
+    occ = future_occurrences[0]
+    occ.opener = user
+    occ.save()
+
+    url = reverse("occurrence_signup_grid", args=[event.id])
+    with mock.patch("events.views.timezone.now") as mock_now:
+        mock_now.return_value = datetime(
+            2025, 8, 25, 10, 11, 7, tzinfo=datetime_timezone.utc
+        )
+        response = client_logged_in.get(url)
+    assert b"Cancel sign-up" in response.content

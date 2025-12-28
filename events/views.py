@@ -63,11 +63,17 @@ def occurrence_grid_signup(request, event_id):
 
         try:
             occurrence = Occurrence.objects.get(id=occurrence_id)
-            if role == "opener" and occurrence.opener is None:
-                occurrence.opener = request.user
+            if role == "opener":
+                if occurrence.opener is None:
+                    occurrence.opener = request.user
+                elif occurrence.opener == request.user:
+                    occurrence.opener = None
                 occurrence.save()
-            elif role == "closer" and occurrence.closer is None:
-                occurrence.closer = request.user
+            elif role == "closer":
+                if occurrence.closer is None:
+                    occurrence.closer = request.user
+                elif occurrence.closer == request.user:
+                    occurrence.closer = None
                 occurrence.save()
         except Occurrence.DoesNotExist:
             pass
