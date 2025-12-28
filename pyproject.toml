@@ -56,6 +56,7 @@ dev = [
     "mypy",
     "pytest",
     "pytest-django",
+    "ruff>=0.14.10",
     "types-markdown",
     "types-python-dateutil",
 ]

@@ -3,9 +3,9 @@ from django import forms
 from django.contrib import admin
 from django.contrib.flatpages.admin import FlatPageAdmin
 from django.contrib.flatpages.models import FlatPage
-
 from invitations.admin import InvitationAdmin
 from invitations.models import Invitation
+
 from music.models import DDCU_BUCKET_IDENTIFIER, Song
 
 
