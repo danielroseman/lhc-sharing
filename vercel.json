@@ -20,10 +20,5 @@
       "src": "/(.*)",
       "dest": "lhc_sharing/wsgi.py"
     }
-  ],
-  "functions": {
-    "lhc_sharing/wsgi.py": {
-      "runtime": "python3.13"
-    }
-  }
+  ]
 }
