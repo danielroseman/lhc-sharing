@@ -46,9 +46,6 @@ exclude = ["**/migrations/*", "oauth2.py"]
 [tool.pytest.ini_options]
 DJANGO_SETTINGS_MODULE = "lhc_sharing.settings"
 
-[tool.uv.sources]
-django-direct-cloud-upload = { git = "https://github.com/danielroseman/django-direct-cloud-upload" }
-
 [dependency-groups]
 dev = [
     "django-stubs",

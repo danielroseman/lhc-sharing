@@ -179,12 +179,13 @@ wheels = [
 
 [[package]]
 name = "django-direct-cloud-upload"
-version = "0.4.0"
-source = { git = "https://github.com/danielroseman/django-direct-cloud-upload#a04216df1478e0296f483ffa15f56bdbd4fa43dd" }
+version = "0.3.3"
+source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "django" },
     { name = "google-cloud-storage" },
 ]
+sdist = { url = "https://files.pythonhosted.org/packages/87/7f/88401d7bf360697bc161bb52e2365276cd86ea2e3edb090438b62e464ed8/django_direct_cloud_upload-0.3.3.tar.gz", hash = "sha256:c4ddd09ceb962edc110ce40f5a790dcac78073ea9c5606b67142ebb50a2c5fb3", size = 15679, upload-time = "2026-02-01T08:17:14.929Z" }
 
 [[package]]
 name = "django-environ"
@@ -602,7 +603,7 @@ requires-dist = [
     { name = "django" },
     { name = "django-allauth" },
     { name = "django-crispy-forms" },
-    { name = "django-direct-cloud-upload", git = "https://github.com/danielroseman/django-direct-cloud-upload" },
+    { name = "django-direct-cloud-upload" },
     { name = "django-environ" },
     { name = "django-gmailapi-backend" },
     { name = "django-ical", specifier = ">=1.9.2" },
