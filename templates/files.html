@@ -6,26 +6,22 @@
 <h1 class="mb-3">{{ song.name }}</h1>
 <ul class="list-group">
   {% for file in song.file_urls %}
-    <li class="list-group-item">
-      <div class="row align-items-center">
-      <div class="col-2 col-sm-1">
-        <span class="badge bg-primary">{{ file.path.suffix.upper|slice:"1:" }}</span>
-      </div>
-
-      <div class="col-6 col-sm-3">
-      <a href="{{ file.url }}">
-        {{ file.path.stem|readable_name }}
-      </a>
-      </div>
-      {% if file.path.suffix == '.mp3' %}
-      <div class="col col-sm mt-2">
-        <audio src="{{ file.url }}" controls>
-      </div>
-      {% elif file.path.suffix == '.pdf' %}
-      <div class="col-2 col-sm mt-2">
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#previewModal" data-bs-filename="{{ file.path.name }}" data-bs-url="{{ file.preview }}">View</button>
-      </div>
-      {% endif %}
+    <li class="list-group-item pt-3">
+      <div class="row align-items-center g-2">
+        <div class="col-2 col-sm-1 d-flex justify-content-center">
+          <span class="badge bg-primary">{{ file.path.suffix.upper|slice:"1:" }}</span>
+        </div>
+        <div class="col-8 col-sm-4">
+          {{ file.path.stem|readable_name }}
+        </div>
+        <div class="col-12 col-sm d-flex flex-row flex-sm-row align-items-center mt-2 mt-sm-0 gap-2 justify-content-end justify-content-sm-start">
+          <a class="btn btn-primary" href="{{ file.url }}">Download</a>
+          {% if file.path.suffix == '.mp3' %}
+            <audio src="{{ file.url }}" controls></audio>
+          {% elif file.path.suffix == '.pdf' %}
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#previewModal" data-bs-filename="{{ file.path.name }}" data-bs-url="{{ file.preview }}">View</button>
+          {% endif %}
+        </div>
       </div>
     </li>
   {% endfor %}
