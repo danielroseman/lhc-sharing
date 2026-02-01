@@ -18,7 +18,7 @@
     <tbody>
       {% for occ in occurrences %}
         <tr>
-          <td class="align-middle">{{ occ.start_time|date:"l, F j, H:i"  }}</td>
+          <td class="align-middle">{{ occ.start_time|date:"l, F j, H:i"  }}{% if request.user.is_staff %} <a href="{% url "admin:events_occurrence_change" occ.id %}">Edit</a>{% endif %}</td>
           {% if occ.is_break %}
           <td class="align-middle" colspan="2"><strong>No rehearsal - {{ occ.details|default:"Break" }}</strong></td>
           {% else %}
