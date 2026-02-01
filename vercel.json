@@ -10,15 +10,20 @@
         "use": "@vercel/static-build",
         "config": {"distDir": "static_root"}
       }
-    ],
-    "routes": [
-      {
-        "src": "/static/(.*)",
-        "dest": "static/$1"
-      },
-      {
-        "src": "/(.*)",
-        "dest": "lhc_sharing/wsgi.py"
-      }
-    ]
+  ],
+  "routes": [
+    {
+      "src": "/static/(.*)",
+      "dest": "static/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "lhc_sharing/wsgi.py"
+    }
+  ],
+  "functions": {
+    "lhc_sharing/wsgi.py": {
+      "runtime": "python3.13"
+    }
   }
+}
