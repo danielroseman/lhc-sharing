@@ -8,7 +8,7 @@
 <p><b>Date</b>: {{ occurrence.start_time|date:"l, F j" }}</p>
 {% else %}
 <p><b>Start time</b>: {{ occurrence.start_time|date:"l, F j, H:i" }}</p>
-<p><b>End time</b>: {{ occurrence.end_time|date:"l, F j, H:i" }}</p>
+{% if occurrence.end_time %}<p><b>End time</b>: {{ occurrence.end_time|date:"l, F j, H:i" }}</p>{% endif %}
 {% endif %}
 
 {{ occurrence.all_details|markdown }}
