@@ -14,5 +14,6 @@
 {{ occurrence.all_details|markdown }}
 
 <p><a href="{% url 'event-monthly-view' occurrence.start_time.year occurrence.start_time.month|stringformat:"02d" %}">Back to calendar</a></p>
+{% if perms.events.change_occurrence %}<p><a href="{% url "admin:events_occurrence_change" occurrence.id %}">Edit</a></td>{% endif %}
 
 {% endblock %}
