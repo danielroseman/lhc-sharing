@@ -2,3 +2,5 @@
 env.prod
 media/
 static_root/
+node_modules/
+python_modules/
