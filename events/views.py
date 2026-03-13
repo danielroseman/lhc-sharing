@@ -3,7 +3,7 @@ import itertools
 from datetime import datetime, timedelta
 
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 from django_ical.views import ICalFeed
 
@@ -45,7 +45,8 @@ def month_view_notes(request, year, month):
 
 @login_required
 def event_occurrence(request, event_id, occurrence_id):
-    occurrence = Occurrence.objects.select_related("event").get(
+    occurrence = get_object_or_404(
+        Occurrence.objects.select_related("event"),
         id=occurrence_id, event__id=event_id
     )
     return render(
