@@ -4,7 +4,7 @@ from django.utils import timezone
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 
-from events.models import Occurrence
+from events.models import Event, Occurrence
 from music.models import Song
 
 
@@ -16,12 +16,19 @@ def home(request):
     )
     next_rehearsal = occurrences.filter(event__event_type__label="Rehearsal").first()
     upcoming_performances = occurrences.filter(event__event_type__label="Performance")
+    
+    rehearsals = Event.objects.filter(
+        event_type__label='Rehearsal',
+        occurrence__start_time__gte=timezone.now(),
+    ).distinct()
+
     return render(
         request,
         "home.html",
         {
             "next_rehearsal": next_rehearsal,
             "upcoming_performances": upcoming_performances,
+            "rehearsals": rehearsals,
         },
     )
 

@@ -1,0 +1,8 @@
+    {% if rehearsals %}
+    Sign up to open and close rehearsals:
+    <ul role="presentation" class="list-unstyled">
+        {% for rehearsal in rehearsals %}
+            <li><a href="{% url 'occurrence_signup_grid' rehearsal.id %}">{{ rehearsal.description }}</a></li>
+        {% endfor %}
+    </ul>
+    {% endif %}
