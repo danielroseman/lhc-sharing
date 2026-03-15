@@ -24,6 +24,8 @@ def month_view_notes(request, year, month):
     )
     occurrences = queryset.filter(start_time__year=year, start_time__month=month)
     current_timezone = timezone.get_current_timezone()
+    rehearsals = Event.objects.filter(event_type__label='Rehearsal',
+                                      occurrence__in=occurrences).distinct()
 
     def start_day(o):
         return o.start_time.astimezone(current_timezone).day
@@ -38,6 +40,7 @@ def month_view_notes(request, year, month):
         "next_month": dtstart + timedelta(days=+last_day),
         "last_month": dtstart + timedelta(days=-1),
         "occurrences": occurrences,
+        "rehearsals": rehearsals,
     }
 
     return render(request, "events/monthly_view.html", data)

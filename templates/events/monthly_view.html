@@ -83,6 +83,7 @@
     {% else %}
         <p>No events this month</p>
     {% endif %}
+    {% include "events/signup.html" with rehearsals=rehearsals %}
     </section>
 {% endblock %}
 {% block extrascript %}
