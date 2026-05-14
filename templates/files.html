@@ -14,10 +14,12 @@
         <div class="col-8 col-sm-4">
           {{ file.path.stem|readable_name }}
         </div>
-        <div class="col-12 col-sm d-flex flex-row flex-sm-row align-items-center mt-2 mt-sm-0 gap-2 justify-content-end justify-content-sm-start">
+        <div class="col-12 col-sm d-flex {% if file.path.suffix == '.mp4' %}flex-column{% else %}flex-row{% endif %} flex-sm-row align-items-center mt-2 mt-sm-0 gap-2 justify-content-end justify-content-sm-start">
           <a class="btn btn-primary" href="{{ file.url }}">Download</a>
           {% if file.path.suffix == '.mp3' %}
             <audio src="{{ file.url }}" controls></audio>
+          {% elif file.path.suffix == '.mp4' %}
+            <video src="{{ file.url }}" controls class="col-8 col-md-7 col-lg-5"></video>
           {% elif file.path.suffix == '.pdf' %}
             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#previewModal" data-bs-filename="{{ file.path.name }}" data-bs-url="{{ file.preview }}">View</button>
           {% endif %}
@@ -37,7 +39,8 @@
 </ul>
 
 <div class="mt-5 mb-3">
-<a href="{% if song.current %}{% url "songs" %}{% else %}{% url "all_songs" %}{% endif %}">Back to songs list</a>
+  <a href="{% if song.current %}{% url "songs" %}{% else %}{% url "all_songs" %}{% endif %}">Back to songs list</a>
+  {% if perms.music.change_song %}<p><a href="{% url "admin:music_song_change" song.id %}">Edit</a></p>{% endif %}
 </div>
 
 <div class="modal fade" id="previewModal" tabindex="-1" aria-labelledby="previewModalLabel" aria-hidden="true">
